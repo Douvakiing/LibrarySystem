@@ -46,14 +46,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BookManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BookManagerForm.Designer.cs">
+      <DependentUpon>BookManagerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="MainDeskForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainDeskForm.Designer.cs">
+      <DependentUpon>MainDeskForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MemberDirectoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MemberDirectoryForm.Designer.cs">
+      <DependentUpon>MemberDirectoryForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="BookManagerForm.resx">
+      <DependentUpon>BookManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainDeskForm.resx">
+      <DependentUpon>MainDeskForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MemberDirectoryForm.resx">
+      <DependentUpon>MemberDirectoryForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
