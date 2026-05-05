@@ -55,6 +55,12 @@
     <Compile Include="AddBookForm.Designer.cs">
       <DependentUpon>AddBookForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddMemberForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddMemberForm.Designer.cs">
+      <DependentUpon>AddMemberForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="BookManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,8 +99,17 @@
     <Compile Include="UpdateBookForm.Designer.cs">
       <DependentUpon>UpdateBookForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UpdateMemberForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateMemberForm.Designer.cs">
+      <DependentUpon>UpdateMemberForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AddBookForm.resx">
       <DependentUpon>AddBookForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AddMemberForm.resx">
+      <DependentUpon>AddMemberForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BookManagerForm.resx">
       <DependentUpon>BookManagerForm.cs</DependentUpon>
@@ -119,6 +134,9 @@
     </Compile>
     <EmbeddedResource Include="UpdateBookForm.resx">
       <DependentUpon>UpdateBookForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateMemberForm.resx">
+      <DependentUpon>UpdateMemberForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
