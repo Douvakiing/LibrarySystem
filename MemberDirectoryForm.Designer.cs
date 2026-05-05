@@ -48,9 +48,9 @@
             // 
             // btnAddMember
             // 
-            this.btnAddMember.Location = new System.Drawing.Point(217, 311);
+            this.btnAddMember.Location = new System.Drawing.Point(197, 311);
             this.btnAddMember.Name = "btnAddMember";
-            this.btnAddMember.Size = new System.Drawing.Size(101, 23);
+            this.btnAddMember.Size = new System.Drawing.Size(121, 23);
             this.btnAddMember.TabIndex = 15;
             this.btnAddMember.Text = "Add Member";
             this.btnAddMember.UseVisualStyleBackColor = true;
@@ -58,9 +58,9 @@
             // 
             // btnDeleteMember
             // 
-            this.btnDeleteMember.Location = new System.Drawing.Point(333, 311);
+            this.btnDeleteMember.Location = new System.Drawing.Point(324, 311);
             this.btnDeleteMember.Name = "btnDeleteMember";
-            this.btnDeleteMember.Size = new System.Drawing.Size(122, 23);
+            this.btnDeleteMember.Size = new System.Drawing.Size(131, 23);
             this.btnDeleteMember.TabIndex = 16;
             this.btnDeleteMember.Text = "Delete Member";
             this.btnDeleteMember.UseVisualStyleBackColor = true;
@@ -68,9 +68,9 @@
             // 
             // btnUpdateMember
             // 
-            this.btnUpdateMember.Location = new System.Drawing.Point(473, 311);
+            this.btnUpdateMember.Location = new System.Drawing.Point(461, 311);
             this.btnUpdateMember.Name = "btnUpdateMember";
-            this.btnUpdateMember.Size = new System.Drawing.Size(114, 23);
+            this.btnUpdateMember.Size = new System.Drawing.Size(126, 23);
             this.btnUpdateMember.TabIndex = 17;
             this.btnUpdateMember.Text = "Update Member";
             this.btnUpdateMember.UseVisualStyleBackColor = true;
@@ -80,7 +80,7 @@
             // 
             this.btnDashboard.Location = new System.Drawing.Point(11, 12);
             this.btnDashboard.Name = "btnDashboard";
-            this.btnDashboard.Size = new System.Drawing.Size(137, 23);
+            this.btnDashboard.Size = new System.Drawing.Size(177, 23);
             this.btnDashboard.TabIndex = 18;
             this.btnDashboard.Text = "Back To Dashboard";
             this.btnDashboard.UseVisualStyleBackColor = true;

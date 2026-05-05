@@ -43,7 +43,9 @@ namespace LibrarySystem
 
         private void btnDashboard_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Form1 form1 = new Form1();
+            form1.Show();
+            this.Hide();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

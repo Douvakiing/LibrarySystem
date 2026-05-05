@@ -18,10 +18,6 @@ namespace LibrarySystem
             InitializeComponent();
         }
 
-        private void chkMemberID_CheckedChanged(object sender, EventArgs e)
-        {
-            txtMemberID.Enabled = chkMemberID.Checked;
-        }
 
         private void chkFirstName_CheckedChanged(object sender, EventArgs e)
         {

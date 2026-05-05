@@ -50,9 +50,9 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnAdd.Location = new System.Drawing.Point(237, 382);
+            this.btnAdd.Location = new System.Drawing.Point(209, 382);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 24);
+            this.btnAdd.Size = new System.Drawing.Size(103, 24);
             this.btnAdd.TabIndex = 13;
             this.btnAdd.Text = "Add Book";
             this.btnAdd.UseVisualStyleBackColor = true;

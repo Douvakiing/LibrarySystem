@@ -18,11 +18,6 @@ namespace LibrarySystem
             InitializeComponent();
         }
 
-        private void chkISBN_CheckedChanged(object sender, EventArgs e)
-        {
-            txtISBN.Enabled = chkISBN.Checked;
-        }
-
         private void chkTitle_CheckedChanged(object sender, EventArgs e)
         {
             txtTitle.Enabled = chkTitle.Checked;

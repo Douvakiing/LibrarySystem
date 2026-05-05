@@ -43,7 +43,6 @@
             this.lblEmail = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lblFirstName = new System.Windows.Forms.Label();
-            this.chkMemberID = new System.Windows.Forms.CheckBox();
             this.chkFirstName = new System.Windows.Forms.CheckBox();
             this.chkLastName = new System.Windows.Forms.CheckBox();
             this.chkEmail = new System.Windows.Forms.CheckBox();
@@ -120,7 +119,6 @@
             // 
             // txtMemberID
             // 
-            this.txtMemberID.Enabled = false;
             this.txtMemberID.Location = new System.Drawing.Point(549, 85);
             this.txtMemberID.Name = "txtMemberID";
             this.txtMemberID.Size = new System.Drawing.Size(100, 22);
@@ -173,16 +171,6 @@
             this.lblFirstName.Size = new System.Drawing.Size(100, 23);
             this.lblFirstName.TabIndex = 31;
             this.lblFirstName.Text = "First Name";
-            // 
-            // chkMemberID
-            // 
-            this.chkMemberID.AutoSize = true;
-            this.chkMemberID.Location = new System.Drawing.Point(361, 86);
-            this.chkMemberID.Name = "chkMemberID";
-            this.chkMemberID.Size = new System.Drawing.Size(18, 17);
-            this.chkMemberID.TabIndex = 46;
-            this.chkMemberID.UseVisualStyleBackColor = true;
-            this.chkMemberID.CheckedChanged += new System.EventHandler(this.chkMemberID_CheckedChanged);
             // 
             // chkFirstName
             // 
@@ -255,7 +243,6 @@
             this.Controls.Add(this.chkEmail);
             this.Controls.Add(this.chkLastName);
             this.Controls.Add(this.chkFirstName);
-            this.Controls.Add(this.chkMemberID);
             this.Controls.Add(this.btnUpdateMember);
             this.Controls.Add(this.lblDate);
             this.Controls.Add(this.dtpMemberDate);
@@ -295,7 +282,6 @@
         private System.Windows.Forms.Label lblEmail;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblFirstName;
-        private System.Windows.Forms.CheckBox chkMemberID;
         private System.Windows.Forms.CheckBox chkFirstName;
         private System.Windows.Forms.CheckBox chkLastName;
         private System.Windows.Forms.CheckBox chkEmail;

@@ -45,7 +45,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lblISBN = new System.Windows.Forms.Label();
-            this.chkISBN = new System.Windows.Forms.CheckBox();
             this.chkTitle = new System.Windows.Forms.CheckBox();
             this.chkCategory = new System.Windows.Forms.CheckBox();
             this.chkAuthor = new System.Windows.Forms.CheckBox();
@@ -85,7 +84,6 @@
             // txtISBN
             // 
             this.txtISBN.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtISBN.Enabled = false;
             this.txtISBN.Location = new System.Drawing.Point(503, 74);
             this.txtISBN.Name = "txtISBN";
             this.txtISBN.Size = new System.Drawing.Size(128, 22);
@@ -208,16 +206,6 @@
             this.lblISBN.TabIndex = 41;
             this.lblISBN.Text = "ISBN";
             // 
-            // chkISBN
-            // 
-            this.chkISBN.AutoSize = true;
-            this.chkISBN.Location = new System.Drawing.Point(354, 76);
-            this.chkISBN.Name = "chkISBN";
-            this.chkISBN.Size = new System.Drawing.Size(18, 17);
-            this.chkISBN.TabIndex = 58;
-            this.chkISBN.UseVisualStyleBackColor = true;
-            this.chkISBN.CheckedChanged += new System.EventHandler(this.chkISBN_CheckedChanged);
-            // 
             // chkTitle
             // 
             this.chkTitle.AutoSize = true;
@@ -300,7 +288,6 @@
             this.Controls.Add(this.chkAuthor);
             this.Controls.Add(this.chkCategory);
             this.Controls.Add(this.chkTitle);
-            this.Controls.Add(this.chkISBN);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dtpPubDate);
@@ -344,7 +331,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblISBN;
-        private System.Windows.Forms.CheckBox chkISBN;
         private System.Windows.Forms.CheckBox chkTitle;
         private System.Windows.Forms.CheckBox chkCategory;
         private System.Windows.Forms.CheckBox chkAuthor;
