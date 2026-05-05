@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -46,70 +48,46 @@ namespace LibrarySystem
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            // 1. Use the global connection string from Program.cs
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
-            {
-                // 2. The SQL Command. Note: I'm omitting PublicationDate for now 
-                // since your form doesn't have a date picker yet.
-                string query = "INSERT INTO Books (ISBN, Title, NumberOfPages, Category, PublicationDate, AuthorName, StaffID, PublisherID) " +
-                               "VALUES (@isbn, @title, @pages, @cat, @pubdate, @author, @staff, @pub)";
-
-                SqlCommand cmd = new SqlCommand(query, con);
-
-                // 3. Bind the values from your UI to the SQL parameters
-                cmd.Parameters.AddWithValue("@isbn", txtISBN.Text);
-                cmd.Parameters.AddWithValue("@title", txtTitle.Text);
-                cmd.Parameters.AddWithValue("@cat", txtCategory.Text);
-                cmd.Parameters.AddWithValue("@pubdate", dtpPubDate.Text);
-                cmd.Parameters.AddWithValue("@author", txtAuthor.Text);
-                cmd.Parameters.AddWithValue("@staff", txtStaffId.Text);
-                cmd.Parameters.AddWithValue("@pub", txtPublisherId.Text);
-
-                // Convert the "Number of Pages" text to an actual integer for the DB
-                int pages = 0;
-                int.TryParse(txtPages.Text, out pages);
-                cmd.Parameters.AddWithValue("@pages", pages);
-
-                try
-                {
-                    con.Open();
-                    cmd.ExecuteNonQuery(); // Execute the insert
-                    MessageBox.Show("Book added successfully!");
-
-                    // 4. Refresh the grid so you see the new book immediately!
-                    RefreshGrid();
-
-                    // Clear the boxes for the next entry
-                    ClearInputs();
-                }
-                catch (Exception ex)
-                {
-                    // This will catch things like duplicate ISBNs or missing Foreign Keys
-                    MessageBox.Show("Database Error: " + ex.Message);
-                }
-            }
+            AddBookForm popup = new AddBookForm();
+            popup.ShowDialog(); // ShowDialog freezes the main form until the popup is closed
+            RefreshGrid();      // Refresh the grid once the user is done adding
         }
 
         // Helper method to clear the text boxes after a successful add
-        private void ClearInputs()
-        {
-            txtISBN.Clear();
-            txtTitle.Clear();
-            txtCategory.Clear();
-            txtAuthor.Clear();
-            txtPages.Clear();
-            txtStaffId.Clear();
-            txtPublisherId.Clear();
-        }
+        
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-
+           UpdateBookForm popup = new UpdateBookForm();
+           popup.ShowDialog(); // ShowDialog freezes the main form until the popup is closed
+           RefreshGrid();      // Refresh the grid once the user is done updating
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            // 1. Prompt for ISBN
+            string isbn = Interaction.InputBox("Enter the ISBN of the book to delete:", "Delete Book", "");
 
+            if (!string.IsNullOrWhiteSpace(isbn))
+            {
+                // 2. Confirm
+                var confirm = MessageBox.Show($"Delete book {isbn}?", "Confirm", MessageBoxButtons.YesNo);
+                if (confirm == DialogResult.Yes)
+                {
+                    using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+                    {
+                        string query = "DELETE FROM Books WHERE ISBN = @isbn";
+                        SqlCommand cmd = new SqlCommand(query, con);
+                        cmd.Parameters.AddWithValue("@isbn", isbn);
+
+                        con.Open();
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows > 0) MessageBox.Show("Deleted.");
+                        else MessageBox.Show("ISBN not found.");
+                        RefreshGrid();
+                    }
+                }
+            }
         }
     }
 }
