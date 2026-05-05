@@ -119,7 +119,7 @@ namespace LibrarySystem
 
             // Staff Inputs
             lblStaffId.Text = "Staff ID:"; lblStaffId.Location = new System.Drawing.Point(16, 290); lblStaffId.AutoSize = true;
-            this.txtStaffId.Location = new System.Drawing.Point(90, 287); this.txtStaffId.Name = "txtStaffId"; this.txtStaffId.ReadOnly = true;
+            this.txtStaffId.Location = new System.Drawing.Point(90, 287); this.txtStaffId.Name = "txtStaffId"; 
 
             lblStaffFirst.Text = "First Name:"; lblStaffFirst.Location = new System.Drawing.Point(16, 320); lblStaffFirst.AutoSize = true;
             this.txtStaffFirst.Location = new System.Drawing.Point(90, 317); this.txtStaffFirst.Name = "txtStaffFirst";
@@ -193,7 +193,7 @@ namespace LibrarySystem
 
             // Publisher Inputs
             lblPubId.Text = "Pub ID:"; lblPubId.Location = new System.Drawing.Point(16, 290); lblPubId.AutoSize = true;
-            this.txtPubId.Location = new System.Drawing.Point(90, 287); this.txtPubId.Name = "txtPubId"; this.txtPubId.ReadOnly = true;
+            this.txtPubId.Location = new System.Drawing.Point(90, 287); this.txtPubId.Name = "txtPubId"; 
 
             lblPubName.Text = "Name:"; lblPubName.Location = new System.Drawing.Point(16, 320); lblPubName.AutoSize = true;
             this.txtPubName.Location = new System.Drawing.Point(90, 317); this.txtPubName.Name = "txtPubName";

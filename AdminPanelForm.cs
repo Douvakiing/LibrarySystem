@@ -26,7 +26,7 @@ namespace LibrarySystem
             using (SqlConnection con = new SqlConnection(Program.ConnectionString))
             {
                 // Updated to match your exact schema columns
-                string query = "SELECT StaffID, Name, Position, Email FROM Staff";
+                string query = "SELECT StaffID, Name, Email FROM Staff";
                 SqlDataAdapter da = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 try
@@ -66,7 +66,7 @@ namespace LibrarySystem
 
             using (SqlConnection con = new SqlConnection(Program.ConnectionString))
             {
-                string query = "SELECT StaffID, Name, Position, Email FROM Staff WHERE StaffID = @id";
+                string query = "SELECT StaffID, Name, Email FROM Staff WHERE StaffID = @id";
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@id", txtStaffId.Text);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -78,10 +78,16 @@ namespace LibrarySystem
 
         private void btnAddStaff_Click(object sender, EventArgs e)
         {
-            // txtStaffFirst acts as Name, txtStaffLast acts as Position
-            if (string.IsNullOrWhiteSpace(txtStaffFirst.Text) || string.IsNullOrWhiteSpace(txtStaffLast.Text))
+            if (string.IsNullOrWhiteSpace(txtStaffId.Text) || string.IsNullOrWhiteSpace(txtStaffFirst.Text) || string.IsNullOrWhiteSpace(txtStaffLast.Text))
             {
-                MessageBox.Show("Name and Position are required.");
+                MessageBox.Show("ID, Name, and Position are required.");
+                return;
+            }
+
+            // Ensure the ID is a valid number before sending to database
+            if (!int.TryParse(txtStaffId.Text, out int staffId))
+            {
+                MessageBox.Show("Staff ID must be a valid number.");
                 return;
             }
 
@@ -89,33 +95,29 @@ namespace LibrarySystem
             {
                 using (SqlConnection con = new SqlConnection(Program.ConnectionString))
                 {
-                    con.Open();
-
-                    // 1. Calculate the next available StaffID since it's not an IDENTITY column
-                    int nextId = 1;
-                    SqlCommand idCmd = new SqlCommand("SELECT ISNULL(MAX(StaffID), 0) + 1 FROM Staff", con);
-                    nextId = Convert.ToInt32(idCmd.ExecuteScalar());
-
-                    // 2. Insert into the database
-                    string query = "INSERT INTO Staff (StaffID, Name, Position, Email) VALUES (@id, @name, @position, @email)";
+                    string query = "INSERT INTO Staff (StaffID, Name, Email) VALUES (@id, @name, @email)";
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@id", nextId);
-                    cmd.Parameters.AddWithValue("@name", txtStaffFirst.Text);     // Mapped to First Name box
-                    cmd.Parameters.AddWithValue("@position", txtStaffLast.Text);  // Mapped to Last Name box
+                    
+                    cmd.Parameters.AddWithValue("@id", staffId); // Now uses your manually typed ID
+                    cmd.Parameters.AddWithValue("@name", txtStaffFirst.Text);
                     cmd.Parameters.AddWithValue("@email", txtStaffEmail.Text);
 
+                    con.Open();
                     cmd.ExecuteNonQuery();
                 }
                 MessageBox.Show("Staff added successfully.");
                 LoadStaffData();
                 ClearStaffInputs();
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error adding staff: " + ex.Message);
+                // Error 2627 is a Primary Key violation (ID already exists)
+                if (ex.Number == 2627)
+                    MessageBox.Show("That Staff ID already exists! Please choose a different ID.");
+                else
+                    MessageBox.Show("Database error: " + ex.Message);
             }
         }
-
         private void btnUpdateStaff_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Select a record in the grid to update (Implementation depends on your specific update flow).");
@@ -227,9 +229,15 @@ namespace LibrarySystem
 
         private void btnAddPub_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtPubName.Text))
+            if (string.IsNullOrWhiteSpace(txtPubId.Text) || string.IsNullOrWhiteSpace(txtPubName.Text))
             {
-                MessageBox.Show("Publisher Name is required.");
+                MessageBox.Show("Publisher ID and Name are required.");
+                return;
+            }
+
+            if (!int.TryParse(txtPubId.Text, out int pubId))
+            {
+                MessageBox.Show("Publisher ID must be a valid number.");
                 return;
             }
 
@@ -239,25 +247,19 @@ namespace LibrarySystem
                 {
                     con.Open();
 
-                    // 1. Calculate next ID
-                    int nextId = 1;
-                    SqlCommand idCmd = new SqlCommand("SELECT ISNULL(MAX(PublisherID), 0) + 1 FROM Publisher", con);
-                    nextId = Convert.ToInt32(idCmd.ExecuteScalar());
-
-                    // 2. Insert the Publisher
+                    // Insert using your manual ID
                     string pubQuery = "INSERT INTO Publisher (PublisherID, PublisherName) VALUES (@id, @name)";
                     SqlCommand cmd = new SqlCommand(pubQuery, con);
-                    cmd.Parameters.AddWithValue("@id", nextId);
+                    cmd.Parameters.AddWithValue("@id", pubId);
                     cmd.Parameters.AddWithValue("@name", txtPubName.Text);
                     cmd.ExecuteNonQuery();
 
-                    // 3. Insert the Address into the child table if provided
                     if (!string.IsNullOrWhiteSpace(txtPubAddress.Text))
                     {
                         string addrQuery = "INSERT INTO PublisherAddress (Address, PublisherID) VALUES (@address, @id)";
                         SqlCommand addrCmd = new SqlCommand(addrQuery, con);
                         addrCmd.Parameters.AddWithValue("@address", txtPubAddress.Text);
-                        addrCmd.Parameters.AddWithValue("@id", nextId);
+                        addrCmd.Parameters.AddWithValue("@id", pubId);
                         addrCmd.ExecuteNonQuery();
                     }
                 }
@@ -265,9 +267,12 @@ namespace LibrarySystem
                 LoadPublisherData();
                 ClearPublisherInputs();
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error adding publisher: " + ex.Message);
+                if (ex.Number == 2627)
+                    MessageBox.Show("That Publisher ID already exists! Please choose a different ID.");
+                else
+                    MessageBox.Show("Database error: " + ex.Message);
             }
         }
 
