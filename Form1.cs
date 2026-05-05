@@ -38,7 +38,13 @@ namespace LibrarySystem
             memberForm.Show();
             this.Hide();
         }
-    }
 
+        private void btnMainDeskPage_Click(object sender, EventArgs e)
+        {
+            MainDeskForm maindesk = new MainDeskForm();
+            maindesk.Show();
+            this.Hide();
+        }
     }
+}
 

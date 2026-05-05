@@ -2,15 +2,8 @@
 {
     partial class MainDeskForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,164 +13,154 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.gbIssueBook = new System.Windows.Forms.GroupBox();
-            this.gbIssueReturn = new System.Windows.Forms.GroupBox();
-            this.txtIssueCopyNumber = new System.Windows.Forms.TextBox();
-            this.txtIssueIsbn = new System.Windows.Forms.TextBox();
+            this.grpIssue = new System.Windows.Forms.GroupBox();
+            this.lblIssueMemberId = new System.Windows.Forms.Label();
             this.txtIssueMemberId = new System.Windows.Forms.TextBox();
-            this.btnIssueBook = new System.Windows.Forms.Button();
-            this.txtReturnCopyNumber = new System.Windows.Forms.TextBox();
+            this.lblIssueISBN = new System.Windows.Forms.Label();
+            this.txtIssueISBN = new System.Windows.Forms.TextBox();
+            this.lblIssueCopyNum = new System.Windows.Forms.Label();
+            this.txtIssueCopyNum = new System.Windows.Forms.TextBox();
+            this.btnIssue = new System.Windows.Forms.Button();
+
+            this.grpReturn = new System.Windows.Forms.GroupBox();
+            this.lblReturnISBN = new System.Windows.Forms.Label();
             this.txtReturnISBN = new System.Windows.Forms.TextBox();
-            this.btnReturnBook = new System.Windows.Forms.Button();
+            this.lblReturnCopyNum = new System.Windows.Forms.Label();
+            this.txtReturnCopyNum = new System.Windows.Forms.TextBox();
+            this.btnReturn = new System.Windows.Forms.Button();
+
             this.dgvActiveLoans = new System.Windows.Forms.DataGridView();
-            this.btnDashboard = new System.Windows.Forms.Button();
-            this.gbIssueBook.SuspendLayout();
-            this.gbIssueReturn.SuspendLayout();
+            this.lblRadar = new System.Windows.Forms.Label();
+            this.btnBack = new System.Windows.Forms.Button();
+
+            this.grpIssue.SuspendLayout();
+            this.grpReturn.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActiveLoans)).BeginInit();
             this.SuspendLayout();
-            // 
-            // gbIssueBook
-            // 
-            this.gbIssueBook.Controls.Add(this.btnIssueBook);
-            this.gbIssueBook.Controls.Add(this.txtIssueMemberId);
-            this.gbIssueBook.Controls.Add(this.txtIssueIsbn);
-            this.gbIssueBook.Controls.Add(this.txtIssueCopyNumber);
-            this.gbIssueBook.Location = new System.Drawing.Point(12, 12);
-            this.gbIssueBook.Name = "gbIssueBook";
-            this.gbIssueBook.Size = new System.Drawing.Size(200, 177);
-            this.gbIssueBook.TabIndex = 0;
-            this.gbIssueBook.TabStop = false;
-            this.gbIssueBook.Text = "Issue Book (Check Out)";
-            // 
-            // gbIssueReturn
-            // 
-            this.gbIssueReturn.Controls.Add(this.btnReturnBook);
-            this.gbIssueReturn.Controls.Add(this.txtReturnCopyNumber);
-            this.gbIssueReturn.Controls.Add(this.txtReturnISBN);
-            this.gbIssueReturn.Location = new System.Drawing.Point(571, 12);
-            this.gbIssueReturn.Name = "gbIssueReturn";
-            this.gbIssueReturn.Size = new System.Drawing.Size(200, 177);
-            this.gbIssueReturn.TabIndex = 1;
-            this.gbIssueReturn.TabStop = false;
-            this.gbIssueReturn.Text = "Process Return (Check In)";
-            // 
-            // txtIssueCopyNumber
-            // 
-            this.txtIssueCopyNumber.Location = new System.Drawing.Point(6, 105);
-            this.txtIssueCopyNumber.Name = "txtIssueCopyNumber";
-            this.txtIssueCopyNumber.Size = new System.Drawing.Size(167, 22);
-            this.txtIssueCopyNumber.TabIndex = 0;
-            this.txtIssueCopyNumber.Text = "Copy Number / Barcode";
-            // 
-            // txtIssueIsbn
-            // 
-            this.txtIssueIsbn.Location = new System.Drawing.Point(6, 63);
-            this.txtIssueIsbn.Name = "txtIssueIsbn";
-            this.txtIssueIsbn.Size = new System.Drawing.Size(100, 22);
-            this.txtIssueIsbn.TabIndex = 1;
-            this.txtIssueIsbn.Text = "Book ISBN";
-            // 
-            // txtIssueMemberId
-            // 
-            this.txtIssueMemberId.Location = new System.Drawing.Point(6, 21);
-            this.txtIssueMemberId.Name = "txtIssueMemberId";
-            this.txtIssueMemberId.Size = new System.Drawing.Size(100, 22);
-            this.txtIssueMemberId.TabIndex = 2;
-            this.txtIssueMemberId.Text = "Member ID";
-            // 
-            // btnIssueBook
-            // 
-            this.btnIssueBook.Location = new System.Drawing.Point(6, 148);
-            this.btnIssueBook.Name = "btnIssueBook";
-            this.btnIssueBook.Size = new System.Drawing.Size(100, 23);
-            this.btnIssueBook.TabIndex = 3;
-            this.btnIssueBook.Text = "Issue Book";
-            this.btnIssueBook.UseVisualStyleBackColor = true;
-            // 
-            // txtReturnCopyNumber
-            // 
-            this.txtReturnCopyNumber.Location = new System.Drawing.Point(6, 63);
-            this.txtReturnCopyNumber.Name = "txtReturnCopyNumber";
-            this.txtReturnCopyNumber.Size = new System.Drawing.Size(160, 22);
-            this.txtReturnCopyNumber.TabIndex = 5;
-            this.txtReturnCopyNumber.Text = "Copy Number / Barcode";
-            // 
-            // txtReturnISBN
-            // 
-            this.txtReturnISBN.Location = new System.Drawing.Point(6, 21);
-            this.txtReturnISBN.Name = "txtReturnISBN";
-            this.txtReturnISBN.Size = new System.Drawing.Size(100, 22);
-            this.txtReturnISBN.TabIndex = 6;
-            this.txtReturnISBN.Text = "Book ISBN";
-            // 
-            // btnReturnBook
-            // 
-            this.btnReturnBook.Location = new System.Drawing.Point(6, 148);
-            this.btnReturnBook.Name = "btnReturnBook";
-            this.btnReturnBook.Size = new System.Drawing.Size(100, 23);
-            this.btnReturnBook.TabIndex = 4;
-            this.btnReturnBook.Text = "Return Book";
-            this.btnReturnBook.UseVisualStyleBackColor = true;
-            // 
-            // dgvActiveLoans
-            // 
+
+            // ==========================================
+            // ZONE A: ISSUE BOOK (Left Side)
+            // ==========================================
+            this.grpIssue.Controls.Add(this.lblIssueMemberId);
+            this.grpIssue.Controls.Add(this.txtIssueMemberId);
+            this.grpIssue.Controls.Add(this.lblIssueISBN);
+            this.grpIssue.Controls.Add(this.txtIssueISBN);
+            this.grpIssue.Controls.Add(this.lblIssueCopyNum);
+            this.grpIssue.Controls.Add(this.txtIssueCopyNum);
+            this.grpIssue.Controls.Add(this.btnIssue);
+            this.grpIssue.Location = new System.Drawing.Point(16, 16);
+            this.grpIssue.Name = "grpIssue";
+            this.grpIssue.Size = new System.Drawing.Size(350, 200);
+            this.grpIssue.TabIndex = 0;
+            this.grpIssue.TabStop = false;
+            this.grpIssue.Text = "Check-Out / Issue Book";
+
+            this.lblIssueMemberId.AutoSize = true; this.lblIssueMemberId.Location = new System.Drawing.Point(20, 40); this.lblIssueMemberId.Text = "Member ID:";
+            this.txtIssueMemberId.Location = new System.Drawing.Point(120, 37); this.txtIssueMemberId.Size = new System.Drawing.Size(200, 22);
+
+            this.lblIssueISBN.AutoSize = true; this.lblIssueISBN.Location = new System.Drawing.Point(20, 80); this.lblIssueISBN.Text = "ISBN:";
+            this.txtIssueISBN.Location = new System.Drawing.Point(120, 77); this.txtIssueISBN.Size = new System.Drawing.Size(200, 22);
+
+            this.lblIssueCopyNum.AutoSize = true; this.lblIssueCopyNum.Location = new System.Drawing.Point(20, 120); this.lblIssueCopyNum.Text = "Copy Number:";
+            this.txtIssueCopyNum.Location = new System.Drawing.Point(120, 117); this.txtIssueCopyNum.Size = new System.Drawing.Size(200, 22);
+
+            this.btnIssue.Location = new System.Drawing.Point(120, 155);
+            this.btnIssue.Size = new System.Drawing.Size(200, 30);
+            this.btnIssue.Text = "Issue Book";
+            this.btnIssue.Click += new System.EventHandler(this.btnIssue_Click);
+
+            // ==========================================
+            // ZONE B: RETURN BOOK (Right Side)
+            // ==========================================
+            this.grpReturn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpReturn.Controls.Add(this.lblReturnISBN);
+            this.grpReturn.Controls.Add(this.txtReturnISBN);
+            this.grpReturn.Controls.Add(this.lblReturnCopyNum);
+            this.grpReturn.Controls.Add(this.txtReturnCopyNum);
+            this.grpReturn.Controls.Add(this.btnReturn);
+            this.grpReturn.Location = new System.Drawing.Point(418, 16);
+            this.grpReturn.Name = "grpReturn";
+            this.grpReturn.Size = new System.Drawing.Size(350, 200);
+            this.grpReturn.TabIndex = 1;
+            this.grpReturn.TabStop = false;
+            this.grpReturn.Text = "Drop Box / Return Book";
+
+            this.lblReturnISBN.AutoSize = true; this.lblReturnISBN.Location = new System.Drawing.Point(20, 40); this.lblReturnISBN.Text = "ISBN:";
+            this.txtReturnISBN.Location = new System.Drawing.Point(120, 37); this.txtReturnISBN.Size = new System.Drawing.Size(200, 22);
+
+            this.lblReturnCopyNum.AutoSize = true; this.lblReturnCopyNum.Location = new System.Drawing.Point(20, 80); this.lblReturnCopyNum.Text = "Copy Number:";
+            this.txtReturnCopyNum.Location = new System.Drawing.Point(120, 77); this.txtReturnCopyNum.Size = new System.Drawing.Size(200, 22);
+
+            this.btnReturn.Location = new System.Drawing.Point(120, 155);
+            this.btnReturn.Size = new System.Drawing.Size(200, 30);
+            this.btnReturn.Text = "Process Return";
+            this.btnReturn.Click += new System.EventHandler(this.btnReturn_Click);
+
+            // ==========================================
+            // ZONE C: ACTIVE LOANS RADAR (Bottom)
+            // ==========================================
+            this.lblRadar.AutoSize = true;
+            this.lblRadar.Location = new System.Drawing.Point(16, 235);
+            this.lblRadar.Text = "Active Loans Radar (Books currently out of library):";
+
+            this.dgvActiveLoans.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvActiveLoans.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvActiveLoans.Location = new System.Drawing.Point(18, 195);
+            this.dgvActiveLoans.Location = new System.Drawing.Point(16, 260);
             this.dgvActiveLoans.Name = "dgvActiveLoans";
-            this.dgvActiveLoans.RowHeadersWidth = 51;
-            this.dgvActiveLoans.RowTemplate.Height = 24;
-            this.dgvActiveLoans.Size = new System.Drawing.Size(770, 214);
+            this.dgvActiveLoans.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvActiveLoans.Size = new System.Drawing.Size(752, 240);
             this.dgvActiveLoans.TabIndex = 2;
-            // 
-            // btnDashboard
-            // 
-            this.btnDashboard.Location = new System.Drawing.Point(18, 415);
-            this.btnDashboard.Name = "btnDashboard";
-            this.btnDashboard.Size = new System.Drawing.Size(167, 23);
-            this.btnDashboard.TabIndex = 3;
-            this.btnDashboard.Text = "Return To Dashboard";
-            this.btnDashboard.UseVisualStyleBackColor = true;
-            // 
-            // MainDeskForm
-            // 
+            this.dgvActiveLoans.ReadOnly = true;
+
+            // Global Controls
+            this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnBack.Location = new System.Drawing.Point(16, 515);
+            this.btnBack.Size = new System.Drawing.Size(100, 30);
+            this.btnBack.Text = "< Back";
+            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
+
+            // Main Form Settings
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnDashboard);
+            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.lblRadar);
             this.Controls.Add(this.dgvActiveLoans);
-            this.Controls.Add(this.gbIssueReturn);
-            this.Controls.Add(this.gbIssueBook);
+            this.Controls.Add(this.grpReturn);
+            this.Controls.Add(this.grpIssue);
+            this.Controls.Add(this.btnBack);
             this.Name = "MainDeskForm";
-            this.Text = "MainDeskForm";
-            this.gbIssueBook.ResumeLayout(false);
-            this.gbIssueBook.PerformLayout();
-            this.gbIssueReturn.ResumeLayout(false);
-            this.gbIssueReturn.PerformLayout();
+            this.Text = "Main Circulation Desk";
+            this.Load += new System.EventHandler(this.MainDeskForm_Load);
+            
+            this.grpIssue.ResumeLayout(false);
+            this.grpIssue.PerformLayout();
+            this.grpReturn.ResumeLayout(false);
+            this.grpReturn.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvActiveLoans)).EndInit();
             this.ResumeLayout(false);
-
+            this.PerformLayout();
         }
 
-        #endregion
-
-        private System.Windows.Forms.GroupBox gbIssueBook;
-        private System.Windows.Forms.GroupBox gbIssueReturn;
+        private System.Windows.Forms.GroupBox grpIssue;
+        private System.Windows.Forms.Label lblIssueMemberId;
         private System.Windows.Forms.TextBox txtIssueMemberId;
-        private System.Windows.Forms.TextBox txtIssueIsbn;
-        private System.Windows.Forms.TextBox txtIssueCopyNumber;
-        private System.Windows.Forms.Button btnIssueBook;
-        private System.Windows.Forms.TextBox txtReturnCopyNumber;
+        private System.Windows.Forms.Label lblIssueISBN;
+        private System.Windows.Forms.TextBox txtIssueISBN;
+        private System.Windows.Forms.Label lblIssueCopyNum;
+        private System.Windows.Forms.TextBox txtIssueCopyNum;
+        private System.Windows.Forms.Button btnIssue;
+
+        private System.Windows.Forms.GroupBox grpReturn;
+        private System.Windows.Forms.Label lblReturnISBN;
         private System.Windows.Forms.TextBox txtReturnISBN;
-        private System.Windows.Forms.Button btnReturnBook;
+        private System.Windows.Forms.Label lblReturnCopyNum;
+        private System.Windows.Forms.TextBox txtReturnCopyNum;
+        private System.Windows.Forms.Button btnReturn;
+
+        private System.Windows.Forms.Label lblRadar;
         private System.Windows.Forms.DataGridView dgvActiveLoans;
-        private System.Windows.Forms.Button btnDashboard;
+        private System.Windows.Forms.Button btnBack;
     }
 }
