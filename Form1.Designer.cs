@@ -65,6 +65,7 @@
             this.btnManageMembersPage.TabIndex = 2;
             this.btnManageMembersPage.Text = "Manage Members";
             this.btnManageMembersPage.UseVisualStyleBackColor = true;
+            this.btnManageMembersPage.Click += new System.EventHandler(this.btnManageMembersPage_Click);
             // 
             // btnMainDeskPage
             // 

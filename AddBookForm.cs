@@ -20,6 +20,18 @@ namespace LibrarySystem
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtISBN.Text) ||
+        string.IsNullOrWhiteSpace(txtTitle.Text) ||
+        string.IsNullOrWhiteSpace(txtPages.Text) ||
+        string.IsNullOrWhiteSpace(txtCategory.Text) ||
+        string.IsNullOrWhiteSpace(txtAuthor.Text) ||
+        string.IsNullOrWhiteSpace(txtStaffId.Text) ||
+        string.IsNullOrWhiteSpace(txtPublisherId.Text))
+            {
+                MessageBox.Show("All fields are mandatory. Please fill out the entire form before saving.");
+                return; // Stops the code from running the database query
+            }
+
             using (SqlConnection con = new SqlConnection(Program.ConnectionString))
             {
                 // Query based on your schema

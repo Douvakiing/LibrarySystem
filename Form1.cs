@@ -23,7 +23,13 @@ namespace LibrarySystem
             BookManagerForm bookForm = new BookManagerForm();
             bookForm.Show();
         }
+
+        private void btnManageMembersPage_Click(object sender, EventArgs e)
+        {
+            MemberDirectoryForm memberForm = new MemberDirectoryForm();
+            memberForm.Show();
+        }
     }
 
-    }
+}
 
