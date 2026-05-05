@@ -154,7 +154,7 @@ namespace LibrarySystem
             this.btnDeleteStaff.Location = new System.Drawing.Point(620, 367); this.btnDeleteStaff.Name = "btnDeleteStaff"; this.btnDeleteStaff.Size = new System.Drawing.Size(100, 30); this.btnDeleteStaff.Text = "Delete Staff"; this.btnDeleteStaff.Click += new System.EventHandler(this.btnDeleteStaff_Click);
 
             this.btnSearchStaff.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearchStaff.Location = new System.Drawing.Point(620, 287); this.btnSearchStaff.Name = "btnSearchStaff"; this.btnSearchStaff.Size = new System.Drawing.Size(100, 30); this.btnSearchStaff.Text = "Search"; this.btnSearchStaff.Visible = false; this.btnSearchStaff.Click += new System.EventHandler(this.btnSearchStaff_Click);
+            this.btnSearchStaff.Location = new System.Drawing.Point(620, 407); this.btnSearchStaff.Name = "btnSearchStaff"; this.btnSearchStaff.Size = new System.Drawing.Size(100, 30); this.btnSearchStaff.Text = "Search";this.btnSearchStaff.Visible=false ;this.btnSearchStaff.Click += new System.EventHandler(this.btnSearchStaff_Click);
 
             // ==========================================
             // TAB 2: PUBLISHERS
@@ -225,7 +225,7 @@ namespace LibrarySystem
             this.btnDeletePub.Location = new System.Drawing.Point(620, 367); this.btnDeletePub.Name = "btnDeletePub"; this.btnDeletePub.Size = new System.Drawing.Size(100, 30); this.btnDeletePub.Text = "Delete Pub"; this.btnDeletePub.Click += new System.EventHandler(this.btnDeletePub_Click);
 
             this.btnSearchPub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearchPub.Location = new System.Drawing.Point(620, 287); this.btnSearchPub.Name = "btnSearchPub"; this.btnSearchPub.Size = new System.Drawing.Size(100, 30); this.btnSearchPub.Text = "Search"; this.btnSearchPub.Visible = false; this.btnSearchPub.Click += new System.EventHandler(this.btnSearchPub_Click);
+            this.btnSearchPub.Location = new System.Drawing.Point(620, 407); this.btnSearchPub.Name = "btnSearchPub"; this.btnSearchPub.Size = new System.Drawing.Size(100, 30); this.btnSearchPub.Text = "Search"; this.btnSearchPub.Visible=false ;this.btnSearchPub.Click += new System.EventHandler(this.btnSearchPub_Click);
 
             // Global Navigation
             this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));

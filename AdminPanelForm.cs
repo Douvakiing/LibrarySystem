@@ -42,7 +42,7 @@ namespace LibrarySystem
         private void chkSearchMode_CheckedChanged(object sender, EventArgs e)
         {
             bool isSearchMode = chkSearchMode.Checked;
-            txtStaffId.ReadOnly = !isSearchMode; 
+            
             
             txtStaffEmail.ReadOnly = isSearchMode;
             txtStaffFirst.ReadOnly = isSearchMode; // Used for Name
@@ -54,6 +54,9 @@ namespace LibrarySystem
             btnUpdateStaff.Enabled = !isSearchMode;
             btnDeleteStaff.Enabled = !isSearchMode;
             btnSearchStaff.Visible = isSearchMode;
+            LoadStaffData();
+            ClearStaffInputs();
+            
         }
 
         private void btnSearchStaff_Click(object sender, EventArgs e)
@@ -191,7 +194,6 @@ namespace LibrarySystem
         private void chkSearchPub_CheckedChanged(object sender, EventArgs e)
         {
             bool isSearchMode = chkSearchPub.Checked;
-            txtPubId.ReadOnly = !isSearchMode;
             
             txtPubName.ReadOnly = isSearchMode;
             txtPubEmail.ReadOnly = isSearchMode;
@@ -202,6 +204,8 @@ namespace LibrarySystem
             btnUpdatePub.Enabled = !isSearchMode;
             btnDeletePub.Enabled = !isSearchMode;
             btnSearchPub.Visible = isSearchMode;
+            LoadPublisherData();
+            ClearPublisherInputs();
         }
 
         private void btnSearchPub_Click(object sender, EventArgs e)
