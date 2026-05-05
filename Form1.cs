@@ -22,14 +22,14 @@ namespace LibrarySystem
             // This creates the new window and pops it up
             BookManagerForm bookForm = new BookManagerForm();
             bookForm.Show();
+            this.Hide();
         }
-
-        private void btnManageMembersPage_Click(object sender, EventArgs e)
+        private void btnAdminPanelPage_Click(object sender, EventArgs e)
         {
-            MemberDirectoryForm memberForm = new MemberDirectoryForm();
-            memberForm.Show();
+            AdminPanelForm adminpanel = new AdminPanelForm();
+            adminpanel.Show();
+            this.Hide();
         }
     }
-
 }
 
