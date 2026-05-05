@@ -124,9 +124,26 @@ namespace LibrarySystem
         // ==========================================
         private void btnReturn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtReturnISBN.Text) || string.IsNullOrWhiteSpace(txtReturnCopyNum.Text))
+            string targetIsbn = "";
+            string targetCopyNum = "";
+
+            // Step 1: Check if a row is selected in the Radar grid
+            if (dgvActiveLoans.SelectedRows.Count > 0)
             {
-                MessageBox.Show("Please enter the ISBN and Copy Number to process a return.");
+                targetIsbn = dgvActiveLoans.SelectedRows[0].Cells["ISBN"].Value.ToString();
+                targetCopyNum = dgvActiveLoans.SelectedRows[0].Cells["CopyNumber"].Value.ToString();
+            }
+            else
+            {
+                // Fallback: If no row is selected, try pulling from the manual textboxes
+                targetIsbn = txtReturnISBN.Text;
+                targetCopyNum = txtReturnCopyNum.Text;
+            }
+
+            // Step 2: Validate that we have the required data
+            if (string.IsNullOrWhiteSpace(targetIsbn) || string.IsNullOrWhiteSpace(targetCopyNum))
+            {
+                MessageBox.Show("Please select a book from the Active Loans radar below OR enter the ISBN and Copy Number manually.");
                 return;
             }
 
@@ -136,24 +153,63 @@ namespace LibrarySystem
                 {
                     con.Open();
 
-                    // Rule 1: Ensure the book is actually checked out
-                    SqlCommand checkBook = new SqlCommand("SELECT BookState FROM BookCopy WHERE ISBN = @isbn AND CopyNumber = @copyNum", con);
-                    checkBook.Parameters.AddWithValue("@isbn", txtReturnISBN.Text);
-                    checkBook.Parameters.AddWithValue("@copyNum", txtReturnCopyNum.Text);
+                    // Rule 1: Get the Book's State AND its Due Date from the database
+                    SqlCommand checkBook = new SqlCommand("SELECT BookState, DueDate FROM BookCopy WHERE ISBN = @isbn AND CopyNumber = @copyNum", con);
+                    checkBook.Parameters.AddWithValue("@isbn", targetIsbn);
+                    checkBook.Parameters.AddWithValue("@copyNum", targetCopyNum);
                     
-                    object stateResult = checkBook.ExecuteScalar();
-                    if (stateResult == null)
+                    string stateResult = "";
+                    DateTime dueDate = DateTime.MaxValue;
+
+                    // We use an SqlDataReader to read multiple columns at once
+                    using (SqlDataReader reader = checkBook.ExecuteReader())
                     {
-                        MessageBox.Show("Error: That ISBN / Copy Number combination does not exist.");
-                        return;
-                    }
-                    if (stateResult.ToString() != "Borrowed")
+                        if (!reader.Read()) // If it can't read a row, the book doesn't exist
+                        {
+                            MessageBox.Show("Error: That ISBN / Copy Number combination does not exist.");
+                            return;
+                        }
+                        
+                        stateResult = reader["BookState"].ToString();
+                        
+                        // Extract the Due Date safely
+                        if (reader["DueDate"] != DBNull.Value)
+                        {
+                            dueDate = Convert.ToDateTime(reader["DueDate"]);
+                        }
+                    } // The reader automatically closes here, which is required before running the next UPDATE command!
+
+                    // Validate State
+                    if (stateResult != "Borrowed")
                     {
                         MessageBox.Show("Error: You cannot return a book that is already marked as Available.");
                         return;
                     }
 
-                    // Rule 2: Process the return. (We update State, set ReturnDate to today, but keep the MemberID attached for historical tracking!)
+                    // --- NEW FEATURE: OVERDUE FINE CALCULATION ---
+                    DateTime returnDate = DateTime.Today; // Gets exactly right now
+                    
+                    if (returnDate > dueDate)
+                    {
+                        // Calculate how many days late it is
+                        TimeSpan lateBy = returnDate - dueDate;
+                        int daysLate = (int)lateBy.TotalDays;
+                        
+                        // Calculate the fine (Example: $2 per day)
+                        int finePerDay = 2; 
+                        int totalFine = daysLate * finePerDay;
+
+                        // Show a warning popup!
+                        MessageBox.Show(
+                            $"⚠ OVERDUE NOTICE ⚠\n\nThis book is {daysLate} days late.\nPlease collect a fine of ${totalFine} from the member.", 
+                            "Overdue Book", 
+                            MessageBoxButtons.OK, 
+                            MessageBoxIcon.Warning
+                        );
+                    }
+                    // ---------------------------------------------
+
+                    // Rule 2: Process the return
                     string returnQuery = @"
                         UPDATE BookCopy 
                         SET BookState = 'Available', 
@@ -161,16 +217,23 @@ namespace LibrarySystem
                         WHERE ISBN = @isbn AND CopyNumber = @copyNum";
 
                     SqlCommand cmd = new SqlCommand(returnQuery, con);
-                    cmd.Parameters.AddWithValue("@isbn", txtReturnISBN.Text);
-                    cmd.Parameters.AddWithValue("@copyNum", txtReturnCopyNum.Text);
+                    cmd.Parameters.AddWithValue("@isbn", targetIsbn);
+                    cmd.Parameters.AddWithValue("@copyNum", targetCopyNum);
                     cmd.ExecuteNonQuery();
                 }
 
                 MessageBox.Show("Book returned successfully! It is now back in circulation.");
-                txtReturnISBN.Clear(); txtReturnCopyNum.Clear();
-                LoadActiveLoans(); // Radar will automatically clear this row!
+                
+                // Clean up the UI
+                txtReturnISBN.Clear(); 
+                txtReturnCopyNum.Clear();
+                dgvActiveLoans.ClearSelection();
+                LoadActiveLoans(); 
             }
-            catch (Exception ex) { MessageBox.Show("Error returning book: " + ex.Message); }
+            catch (Exception ex) 
+            { 
+                MessageBox.Show("Error returning book: " + ex.Message); 
+            }
         }
 
         private void btnBack_Click(object sender, EventArgs e)
