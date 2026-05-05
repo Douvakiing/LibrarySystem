@@ -15,8 +15,15 @@ namespace LibrarySystem
         public Form1()
         {
             InitializeComponent();
-            
         }
 
+        private void btnManageBooksPage_Click_1(object sender, EventArgs e)
+        {
+            // This creates the new window and pops it up
+            BookManagerForm bookForm = new BookManagerForm();
+            bookForm.Show();
+        }
     }
-}
+
+    }
+
