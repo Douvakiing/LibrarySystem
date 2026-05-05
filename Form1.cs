@@ -15,6 +15,7 @@ namespace LibrarySystem
         public Form1()
         {
             InitializeComponent();
+            this.Text="LibrarySystem";
         }
 
         private void btnManageBooksPage_Click_1(object sender, EventArgs e)
@@ -35,6 +36,7 @@ namespace LibrarySystem
         {
             MemberDirectoryForm memberForm = new MemberDirectoryForm();
             memberForm.Show();
+            this.Hide();
         }
     }
 
