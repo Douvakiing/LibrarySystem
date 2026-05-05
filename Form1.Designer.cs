@@ -88,7 +88,8 @@
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(717, 412);
-            this.Controls.Add(this.btnAdminPanelPage);
+this.btnAdminPanelPage.Click += new System.EventHandler(this.btnAdminPanelPage_Click);
+                        this.Controls.Add(this.btnAdminPanelPage);
             this.Controls.Add(this.btnMainDeskPage);
             this.Controls.Add(this.btnManageMembersPage);
             this.Controls.Add(this.btnManageBooksPage);
