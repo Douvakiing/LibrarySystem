@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.Compatibility" />
+    <Reference Include="Microsoft.VisualBasic.Compatibility.Data" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddBookForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddBookForm.Designer.cs">
+      <DependentUpon>AddBookForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="BookManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +87,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateBookForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateBookForm.Designer.cs">
+      <DependentUpon>UpdateBookForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AddBookForm.resx">
+      <DependentUpon>AddBookForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BookManagerForm.resx">
       <DependentUpon>BookManagerForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -99,6 +117,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UpdateBookForm.resx">
+      <DependentUpon>UpdateBookForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
