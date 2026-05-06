@@ -260,6 +260,7 @@
             this.Controls.Add(this.lblFirstName);
             this.Name = "UpdateMemberForm";
             this.Text = "UpdateMemberForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
             this.PerformLayout();
 

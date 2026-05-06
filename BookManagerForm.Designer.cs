@@ -111,6 +111,7 @@
             this.Name = "BookManagerForm";
             this.Text = "BookManagerForm";
             this.Load += new System.EventHandler(this.BookManagerForm_Load);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).EndInit();
             this.ResumeLayout(false);
 

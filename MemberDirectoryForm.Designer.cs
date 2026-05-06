@@ -105,6 +105,7 @@
             this.Name = "MemberDirectoryForm";
             this.Text = "MemberDirectoryForm";
             this.Load += new System.EventHandler(this.MemberDirectoryForm_Load);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             ((System.ComponentModel.ISupportInitialize)(this.dgvMembers)).EndInit();
             this.ResumeLayout(false);
 

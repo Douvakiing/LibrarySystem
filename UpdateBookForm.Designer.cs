@@ -307,6 +307,7 @@
             this.Controls.Add(this.lblISBN);
             this.Name = "UpdateBookForm";
             this.Text = "UpdateBookForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
             this.PerformLayout();
 

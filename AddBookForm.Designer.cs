@@ -216,6 +216,7 @@
             this.Controls.Add(this.lblISBN);
             this.Name = "AddBookForm";
             this.Text = "AddBookForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
             this.PerformLayout();
 

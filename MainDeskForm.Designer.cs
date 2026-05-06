@@ -174,6 +174,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Main Circulation Desk";
             this.Load += new System.EventHandler(this.MainDeskForm_Load);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             
             this.grpIssue.ResumeLayout(false);
             this.grpIssue.PerformLayout();

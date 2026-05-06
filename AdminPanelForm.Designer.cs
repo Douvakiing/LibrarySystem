@@ -252,6 +252,7 @@ namespace LibrarySystem
             this.tabStaff.PerformLayout();
             this.tabPublishers.ResumeLayout(false);
             this.tabPublishers.PerformLayout();
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             ((System.ComponentModel.ISupportInitialize)(this.dgvStaff)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPublishers)).EndInit();
             this.ResumeLayout(false);

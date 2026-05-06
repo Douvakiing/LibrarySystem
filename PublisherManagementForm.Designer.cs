@@ -105,6 +105,7 @@ namespace LibrarySystem
             this.Name = "PublisherManagementForm";
             this.Text = "Publisher Management";
             this.Load += new System.EventHandler(this.PublisherManagementForm_Load);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 
             ((System.ComponentModel.ISupportInitialize)(this.dgvPublishers)).EndInit();
             this.ResumeLayout(false);

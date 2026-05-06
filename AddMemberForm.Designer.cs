@@ -182,6 +182,7 @@
             this.Controls.Add(this.lblFirstName);
             this.Name = "AddMemberForm";
             this.Text = "AddMemberForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
             this.PerformLayout();
 
