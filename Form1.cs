@@ -26,51 +26,31 @@ namespace LibrarySystem
         {
             try
             {
-                // Attempt to connect to the SQL Server
+                // Attempt to connect to the database
                 using (SqlConnection con = new SqlConnection(Program.ConnectionString))
                 {
                     con.Open();
                     
-                    // Ask SQL Server which database is currently active
-                    using (SqlCommand cmd = new SqlCommand("SELECT DB_NAME()", con))
-                    {
-                        string currentDb = cmd.ExecuteScalar()?.ToString();
-                        
-                        // Check if it is EXACTLY "LibrarySystem"
-                        if (currentDb != null && currentDb.Equals("LibrarySystem", StringComparison.OrdinalIgnoreCase))
-                        {
-                            // Success!
-                            tbox.Text = "Connected to LibrarySystem DB!";
-                            tbox.BackColor = Color.LightGreen;
-                        }
-                        else
-                        {
-                            // It connected to the server, but the database is wrong or missing
-                            tbox.Text = $"Wrong DB: {currentDb}";
-                            tbox.BackColor = Color.LightCoral;
-                            
-                            LockSystem($"Connected to SQL Server, but the target database is missing or incorrect.\n\nExpected: LibrarySystem\nFound: {currentDb}");
-                        }
-                    }
+                    // If we get here, the connection was successful
+                    tbox.Text = "Connected to SQL Server";
+                    tbox.BackColor = Color.LightGreen;
                 }
             }
             catch (SqlException ex)
             {
-                // If it fails to connect to SQL Server entirely (e.g., server is down)
-                tbox.Text = "SQL Connection Failed!";
+                // If it fails, show error status
+                tbox.Text = "SQL Connection Failed .\r\nCannot access rest of operations";
                 tbox.BackColor = Color.LightCoral;
-                
-                LockSystem("Could not connect to the SQL Server.\n\nError Details:\n" + ex.Message);
-            }
-        }
-        private void LockSystem(string errorMessage)
-        {
-            btnManageBooksPage.Enabled = false;
-            btnManageMembersPage.Enabled = false;
-            btnMainDeskPage.Enabled = false;
-            btnAdminPanelPage.Enabled = false;
 
-            MessageBox.Show(errorMessage, "System Locked", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Lock down the navigation buttons
+                btnManageBooksPage.Enabled = false;
+                btnManageMembersPage.Enabled = false;
+                btnMainDeskPage.Enabled = false;
+                btnAdminPanelPage.Enabled = false;
+
+                // Show an error pop-up with the exact SQL error
+                MessageBox.Show("Could not connect to the database. The system is locked.\n\nError Details:\n" + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnManageBooksPage_Click_1(object sender, EventArgs e)
