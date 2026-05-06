@@ -82,11 +82,34 @@ namespace LibrarySystem
                         SqlCommand cmd = new SqlCommand(query, con);
                         cmd.Parameters.AddWithValue("@isbn", isbn);
 
-                        con.Open();
-                        int rows = cmd.ExecuteNonQuery();
-                        if (rows > 0) MessageBox.Show("Deleted.");
-                        else MessageBox.Show("ISBN not found.");
-                        RefreshGrid();
+                        try
+                        {
+                            con.Open();
+                            int rows = cmd.ExecuteNonQuery();
+                            if (rows > 0) MessageBox.Show("Deleted.");
+                            else MessageBox.Show("ISBN not found.");
+                            RefreshGrid();
+
+                        }
+                        catch (SqlException ex)
+                        {
+                            if (ex.Number == 547)
+                            {
+                                MessageBox.Show("This book is currently borrowed or has physical copies registered in the system! " +
+                                                "You must return the copies and remove them from the Circulation Desk before deleting the book record.",
+                                                "Action Denied", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            }
+                            else
+                            {
+                                // Something else went wrong (server down, etc.)
+                                MessageBox.Show("A database error occurred: " + ex.Message, "Error");
+                            }
+                        }
+                        finally
+                        {
+                            RefreshGrid();
+                            con.Close();
+                        }
                     }
                 }
             }
