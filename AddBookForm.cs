@@ -35,8 +35,8 @@ namespace LibrarySystem
             using (SqlConnection con = new SqlConnection(Program.ConnectionString))
             {
                 // Query based on your schema
-                string query = "INSERT INTO Books (ISBN, Title, Language, NumberOfPages, Category, AuthorName, StaffID, PublisherID) " +
-                               "VALUES (@isbn, @title, @lang, @pages, @cat, @author, @staff, @pub)";
+                string query = "INSERT INTO Books (ISBN, Title, NumberOfPages, Category, AuthorName, StaffID, PublisherID) " +
+                               "VALUES (@isbn, @title, @pages, @cat, @author, @staff, @pub)";
 
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@isbn", txtISBN.Text);
@@ -57,6 +57,10 @@ namespace LibrarySystem
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error: " + ex.Message);
+                }
+                finally
+                {
+                    con.Close();
                 }
             }
         }
