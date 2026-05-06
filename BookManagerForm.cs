@@ -67,48 +67,70 @@ namespace LibrarySystem
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            // 1. Prompt for ISBN
             string isbn = Interaction.InputBox("Enter the ISBN of the book to delete:", "Delete Book", "");
 
             if (!string.IsNullOrWhiteSpace(isbn))
             {
-                // 2. Confirm
-                var confirm = MessageBox.Show($"Delete book {isbn}?", "Confirm", MessageBoxButtons.YesNo);
+                var confirm = MessageBox.Show($"Are you sure you want to delete book {isbn} and ALL of its copies?",
+                                              "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
                 if (confirm == DialogResult.Yes)
                 {
                     using (SqlConnection con = new SqlConnection(Program.ConnectionString))
                     {
-                        string query = "DELETE FROM Books WHERE ISBN = @isbn";
-                        SqlCommand cmd = new SqlCommand(query, con);
-                        cmd.Parameters.AddWithValue("@isbn", isbn);
+                        con.Open();
+                        // Start a transaction so all steps happen together or not at all
+                        SqlTransaction transaction = con.BeginTransaction();
 
                         try
                         {
-                            con.Open();
-                            int rows = cmd.ExecuteNonQuery();
-                            if (rows > 0) MessageBox.Show("Deleted.");
-                            else MessageBox.Show("ISBN not found.");
-                            RefreshGrid();
+                            // STEP 1: Check if any copy is currently 'Checked Out'
+                            string checkQuery = "SELECT COUNT(*) FROM BookCopy WHERE ISBN = @isbn AND BookState = 'Checked Out'";
+                            SqlCommand checkCmd = new SqlCommand(checkQuery, con, transaction);
+                            checkCmd.Parameters.AddWithValue("@isbn", isbn);
 
-                        }
-                        catch (SqlException ex)
-                        {
-                            if (ex.Number == 547)
+                            int borrowedCount = (int)checkCmd.ExecuteScalar();
+
+                            if (borrowedCount > 0)
                             {
-                                MessageBox.Show("This book is currently borrowed or has physical copies registered in the system! " +
-                                                "You must return the copies and remove them from the Circulation Desk before deleting the book record.",
-                                                "Action Denied", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                                MessageBox.Show($"Action Denied: {borrowedCount} copy/copies of this book are currently borrowed!",
+                                                "Book is Borrowed", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                                transaction.Rollback(); // Cancel everything
+                                return;
+                            }
+
+                            // STEP 2: Delete all copies from BookCopy (since we know none are borrowed)
+                            string delCopiesQuery = "DELETE FROM BookCopy WHERE ISBN = @isbn";
+                            SqlCommand delCopiesCmd = new SqlCommand(delCopiesQuery, con, transaction);
+                            delCopiesCmd.Parameters.AddWithValue("@isbn", isbn);
+                            delCopiesCmd.ExecuteNonQuery();
+
+                            // STEP 3: Delete the main book record
+                            string delBookQuery = "DELETE FROM Books WHERE ISBN = @isbn";
+                            SqlCommand delBookCmd = new SqlCommand(delBookQuery, con, transaction);
+                            delBookCmd.Parameters.AddWithValue("@isbn", isbn);
+
+                            int rows = delBookCmd.ExecuteNonQuery();
+
+                            if (rows > 0)
+                            {
+                                transaction.Commit(); // Save changes permanently
+                                MessageBox.Show("Book and all available copies deleted successfully.", "Success");
                             }
                             else
                             {
-                                // Something else went wrong (server down, etc.)
-                                MessageBox.Show("A database error occurred: " + ex.Message, "Error");
+                                transaction.Rollback();
+                                MessageBox.Show("ISBN not found.", "Error");
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback(); // Something went wrong, undo everything
+                            MessageBox.Show("An error occurred during deletion: " + ex.Message);
                         }
                         finally
                         {
                             RefreshGrid();
-                            con.Close();
                         }
                     }
                 }
