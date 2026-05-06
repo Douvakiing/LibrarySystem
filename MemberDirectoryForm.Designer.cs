@@ -38,9 +38,15 @@
             // 
             // dgvMembers
             // 
+            this.dgvMembers.AllowUserToAddRows = false;
+            this.dgvMembers.AllowUserToDeleteRows = false;
+            this.dgvMembers.AllowUserToOrderColumns = true;
+            this.dgvMembers.AllowUserToResizeColumns = false;
+            this.dgvMembers.AllowUserToResizeRows = false;
             this.dgvMembers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMembers.Location = new System.Drawing.Point(12, 41);
             this.dgvMembers.Name = "dgvMembers";
+            this.dgvMembers.ReadOnly = true;
             this.dgvMembers.RowHeadersWidth = 51;
             this.dgvMembers.RowTemplate.Height = 24;
             this.dgvMembers.Size = new System.Drawing.Size(776, 220);
@@ -58,7 +64,7 @@
             // 
             // btnDeleteMember
             // 
-            this.btnDeleteMember.Location = new System.Drawing.Point(324, 311);
+            this.btnDeleteMember.Location = new System.Drawing.Point(495, 311);
             this.btnDeleteMember.Name = "btnDeleteMember";
             this.btnDeleteMember.Size = new System.Drawing.Size(131, 23);
             this.btnDeleteMember.TabIndex = 16;
@@ -68,7 +74,7 @@
             // 
             // btnUpdateMember
             // 
-            this.btnUpdateMember.Location = new System.Drawing.Point(461, 311);
+            this.btnUpdateMember.Location = new System.Drawing.Point(350, 311);
             this.btnUpdateMember.Name = "btnUpdateMember";
             this.btnUpdateMember.Size = new System.Drawing.Size(126, 23);
             this.btnUpdateMember.TabIndex = 17;

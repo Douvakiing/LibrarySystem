@@ -45,7 +45,7 @@ namespace LibrarySystem
 
         private void chkPublishedId_CheckedChanged(object sender, EventArgs e)
         {
-            txtPublisherId.Enabled = chkPages.Checked;
+            txtPublisherId.Enabled = chkPublishedId.Checked;
         }
 
         private void chkPubDate_CheckedChanged(object sender, EventArgs e)
@@ -97,7 +97,7 @@ namespace LibrarySystem
                     columnsToUpdate.Add("PublisherID = @pub"); // Foreign Key
                     cmd.Parameters.AddWithValue("@pub", txtPublisherId.Text);
                 }
-                if (dtpPubDate.Checked)
+                if (chkPubDate.Checked)
                 {
                     columnsToUpdate.Add("PublicationDate = @date");
                     cmd.Parameters.AddWithValue("@date", dtpPubDate.Value);
