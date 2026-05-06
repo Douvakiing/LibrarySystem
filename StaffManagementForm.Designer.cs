@@ -34,11 +34,24 @@ namespace LibrarySystem
             ((System.ComponentModel.ISupportInitialize)(this.dgvStaff)).BeginInit();
             this.SuspendLayout();
 
+           // 
+            // dgvStaff Configuration
+            // 
+            this.dgvStaff.AllowUserToAddRows = false;
+            this.dgvStaff.AllowUserToDeleteRows = false;
+            this.dgvStaff.AllowUserToOrderColumns = true;
+            this.dgvStaff.AllowUserToResizeColumns = false;
+            this.dgvStaff.AllowUserToResizeRows = false;
             this.dgvStaff.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvStaff.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvStaff.Location = new System.Drawing.Point(16, 16);
             this.dgvStaff.Name = "dgvStaff";
+            this.dgvStaff.ReadOnly = true;
+            this.dgvStaff.RowHeadersWidth = 51;
+            this.dgvStaff.RowTemplate.Height = 24;
             this.dgvStaff.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvStaff.Size = new System.Drawing.Size(752, 250);
+            this.dgvStaff.TabIndex = 0;
             this.dgvStaff.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStaff_CellClick);
 
             lblId.Text = "Staff ID:"; lblId.Location = new System.Drawing.Point(16, 290); lblId.AutoSize = true;
@@ -71,7 +84,7 @@ namespace LibrarySystem
             this.btnDelete.Location = new System.Drawing.Point(620, 367); this.btnDelete.Size = new System.Drawing.Size(100, 30); this.btnDelete.Text = "Delete Staff"; this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
 
             this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearch.Location = new System.Drawing.Point(620, 287); this.btnSearch.Size = new System.Drawing.Size(100, 30); this.btnSearch.Text = "Search"; this.btnSearch.Visible = false; this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnSearch.Location = new System.Drawing.Point(620, 407); this.btnSearch.Size = new System.Drawing.Size(100, 30); this.btnSearch.Text = "Search"; this.btnSearch.Visible = false; this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
 
             this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnBack.Location = new System.Drawing.Point(16, 515);
