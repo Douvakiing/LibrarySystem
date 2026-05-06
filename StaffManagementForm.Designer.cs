@@ -71,7 +71,7 @@ namespace LibrarySystem
             this.btnDelete.Location = new System.Drawing.Point(620, 367); this.btnDelete.Size = new System.Drawing.Size(100, 30); this.btnDelete.Text = "Delete Staff"; this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
 
             this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearch.Location = new System.Drawing.Point(620, 287); this.btnSearch.Size = new System.Drawing.Size(100, 30); this.btnSearch.Text = "Search"; this.btnSearch.Visible = false; this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnSearch.Location = new System.Drawing.Point(620, 407); this.btnSearch.Size = new System.Drawing.Size(100, 30); this.btnSearch.Text = "Search"; this.btnSearch.Visible = false; this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
 
             this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnBack.Location = new System.Drawing.Point(16, 515);
