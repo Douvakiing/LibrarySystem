@@ -39,6 +39,7 @@ namespace LibrarySystem
             this.dgvStaff.Name = "dgvStaff";
             this.dgvStaff.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvStaff.Size = new System.Drawing.Size(752, 250);
+            this.dgvStaff.ReadOnly=true;
             this.dgvStaff.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStaff_CellClick);
 
             lblId.Text = "Staff ID:"; lblId.Location = new System.Drawing.Point(16, 290); lblId.AutoSize = true;
