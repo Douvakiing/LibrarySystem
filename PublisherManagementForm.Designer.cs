@@ -34,12 +34,24 @@ namespace LibrarySystem
             ((System.ComponentModel.ISupportInitialize)(this.dgvPublishers)).BeginInit();
             this.SuspendLayout();
 
+            // 
+            // dgvPublishers Configuration
+            // 
+            this.dgvPublishers.AllowUserToAddRows = false;
+            this.dgvPublishers.AllowUserToDeleteRows = false;
+            this.dgvPublishers.AllowUserToOrderColumns = true;
+            this.dgvPublishers.AllowUserToResizeColumns = false;
+            this.dgvPublishers.AllowUserToResizeRows = false;
             this.dgvPublishers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvPublishers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPublishers.Location = new System.Drawing.Point(16, 16);
             this.dgvPublishers.Name = "dgvPublishers";
+            this.dgvPublishers.ReadOnly = true;
+            this.dgvPublishers.RowHeadersWidth = 51;
+            this.dgvPublishers.RowTemplate.Height = 24;
             this.dgvPublishers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPublishers.Size = new System.Drawing.Size(752, 250);
-            this.dgvPublishers.ReadOnly=true;
+            this.dgvPublishers.TabIndex = 0;
             this.dgvPublishers.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPublishers_CellClick);
 
             lblId.Text = "Pub ID:"; lblId.Location = new System.Drawing.Point(16, 290); lblId.AutoSize = true;
