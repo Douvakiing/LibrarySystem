@@ -80,13 +80,24 @@ namespace LibrarySystem
 
                     // Rule 2: Does this specific copy exist AND is it Available?
                     SqlCommand checkBook = new SqlCommand("SELECT BookState FROM BookCopy WHERE ISBN = @isbn AND CopyNumber = @copyNum", con);
+                    SqlCommand checkisbn = new SqlCommand("SELECT ISBN FROM BookCopy WHERE ISBN = @isbn ",con);
+                    SqlCommand checkcopynum = new SqlCommand("SELECT CopyNumber FROM BookCopy WHERE CopyNumber = @copyNum ",con);
                     checkBook.Parameters.AddWithValue("@isbn", txtIssueISBN.Text);
                     checkBook.Parameters.AddWithValue("@copyNum", txtIssueCopyNum.Text);
-                    
+                    checkisbn.Parameters.AddWithValue("@isbn",txtIssueISBN.Text);
+                    checkcopynum.Parameters.AddWithValue("@copyNum", txtIssueCopyNum.Text);
+
                     object stateResult = checkBook.ExecuteScalar();
-                    if (stateResult == null)
+                    object isbnResult = checkisbn.ExecuteScalar();
+                    object CopyNumberResult = checkcopynum.ExecuteScalar();
+                    if (isbnResult == null)
                     {
-                        MessageBox.Show("Error: That ISBN / Copy Number combination does not exist in the inventory.");
+                        MessageBox.Show("Error: That book is currently not available in the inventory.");
+                        return;
+                    }
+                    else if (isbnResult != null || CopyNumberResult == null)
+                    {
+                        MessageBox.Show("Error: all copies are borrowed now.");
                         return;
                     }
                     if (stateResult.ToString() != "Available")
