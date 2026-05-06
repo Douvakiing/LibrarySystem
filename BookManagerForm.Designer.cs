@@ -38,9 +38,15 @@
             // 
             // dgvBooks
             // 
+            this.dgvBooks.AllowUserToAddRows = false;
+            this.dgvBooks.AllowUserToDeleteRows = false;
+            this.dgvBooks.AllowUserToOrderColumns = true;
+            this.dgvBooks.AllowUserToResizeColumns = false;
+            this.dgvBooks.AllowUserToResizeRows = false;
             this.dgvBooks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBooks.Location = new System.Drawing.Point(12, 50);
             this.dgvBooks.Name = "dgvBooks";
+            this.dgvBooks.ReadOnly = true;
             this.dgvBooks.RowHeadersWidth = 51;
             this.dgvBooks.RowTemplate.Height = 24;
             this.dgvBooks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;

@@ -35,7 +35,6 @@ namespace LibrarySystem
                 try
                 {
                     adapter.Fill(dataTable);
-                    // Check your GridView name in Properties; it might be dataGridView1
                     dgvMembers.DataSource = dataTable;
                 }
                 catch (Exception ex)
@@ -53,7 +52,7 @@ namespace LibrarySystem
         private void btnAddMember_Click(object sender, EventArgs e)
         {
             AddMemberForm popup = new AddMemberForm();
-            popup.ShowDialog(); // ShowDialog freezes the main form until the popup is closed
+            popup.ShowDialog(); 
             RefreshGrid();
         }
 
@@ -74,11 +73,33 @@ namespace LibrarySystem
                         SqlCommand cmd = new SqlCommand(query, con);
                         cmd.Parameters.AddWithValue("@memberID", memberID);
 
-                        con.Open();
-                        int rows = cmd.ExecuteNonQuery();
-                        if (rows > 0) MessageBox.Show("Deleted.");
-                        else MessageBox.Show("memberID not found.");
-                        RefreshGrid();
+                        try
+                        {
+                            con.Open();
+                            int rows = cmd.ExecuteNonQuery();
+                            if (rows > 0) MessageBox.Show("Deleted.");
+                            else MessageBox.Show("memberID not found.");
+
+                        }
+                        catch (SqlException ex)
+                        {
+                            if (ex.Number == 547)
+                            {
+                                MessageBox.Show("This member currently has a book borrowed! " +
+                                                "You must wait until the member returns the book and remove them from the Circulation Desk before deleting the member.",
+                                                "Action Denied", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            }
+                            else
+                            {
+                                // Something else went wrong (server down, etc.)
+                                MessageBox.Show("A database error occurred: " + ex.Message, "Error");
+                            }
+                        }
+                        finally
+                        {
+                            RefreshGrid();
+                            con.Close();
+                        }
                     }
                 }
             }
