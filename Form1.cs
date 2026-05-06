@@ -63,12 +63,14 @@ namespace LibrarySystem
                 LockSystem("Could not connect to the SQL Server.\n\nError Details:\n" + ex.Message);
             }
         }
+        
         private void LockSystem(string errorMessage)
         {
             btnManageBooksPage.Enabled = false;
             btnManageMembersPage.Enabled = false;
             btnMainDeskPage.Enabled = false;
-            btnAdminPanelPage.Enabled = false;
+            btnManageStaff.Enabled = false;
+            btnManagePublishers.Enabled = false;
 
             MessageBox.Show(errorMessage, "System Locked", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -77,13 +79,6 @@ namespace LibrarySystem
         {
             BookManagerForm bookForm = new BookManagerForm();
             bookForm.Show();
-            this.Hide();
-        }
-        
-        private void btnAdminPanelPage_Click(object sender, EventArgs e)
-        {
-            AdminPanelForm adminpanel = new AdminPanelForm();
-            adminpanel.Show();
             this.Hide();
         }
 
@@ -98,6 +93,23 @@ namespace LibrarySystem
         {
             MainDeskForm maindesk = new MainDeskForm();
             maindesk.Show();
+            this.Hide();
+        }
+
+        // --- NEW BUTTONS TO REPLACE ADMIN PANEL ---
+        private void btnManageStaff_Click(object sender, EventArgs e)
+        {
+            // Assuming you named your split form 'StaffManagementForm'
+            StaffManagementForm staffForm = new StaffManagementForm();
+            staffForm.Show();
+            this.Hide();
+        }
+
+        private void btnManagePublishers_Click(object sender, EventArgs e)
+        {
+            // Assuming you named your split form 'PublisherManagementForm'
+            PublisherManagementForm pubForm = new PublisherManagementForm();
+            pubForm.Show();
             this.Hide();
         }
     }

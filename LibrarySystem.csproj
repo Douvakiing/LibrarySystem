@@ -85,6 +85,18 @@
     <Compile Include="MemberDirectoryForm.Designer.cs">
       <DependentUpon>MemberDirectoryForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="StaffManagementForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StaffManagementForm.Designer.cs">
+      <DependentUpon>StaffManagementForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PublisherManagementForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PublisherManagementForm.Designer.cs">
+      <DependentUpon>PublisherManagementForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdminPanelForm.cs">
       <SubType>Form</SubType>
     </Compile>
