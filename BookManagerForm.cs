@@ -85,7 +85,7 @@ namespace LibrarySystem
                         try
                         {
                             // STEP 1: Check if any copy is currently 'Checked Out'
-                            string checkQuery = "SELECT COUNT(*) FROM BookCopy WHERE ISBN = @isbn AND BookState = 'Checked Out'";
+                            string checkQuery = "SELECT COUNT(*) FROM BookCopy WHERE ISBN = @isbn AND BookState = 'Borrowed'";
                             SqlCommand checkCmd = new SqlCommand(checkQuery, con, transaction);
                             checkCmd.Parameters.AddWithValue("@isbn", isbn);
 
