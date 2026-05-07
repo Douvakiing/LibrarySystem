@@ -26,26 +26,29 @@ namespace LibrarySystem
             this.btnManageStaff = new System.Windows.Forms.Button();
             this.btnManagePublishers = new System.Windows.Forms.Button();
             this.tbox = new System.Windows.Forms.TextBox();
+            this.pic = new System.Windows.Forms.PictureBox();
+            
+            // Required for PictureBox initialization
+            ((System.ComponentModel.ISupportInitialize)(this.pic)).BeginInit();
             this.SuspendLayout();
             
             // 
             // label
             // 
-            this.label.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.label.Font = new System.Drawing.Font("Segoe UI", 15F);
-            this.label.Location = new System.Drawing.Point(160, 20); // Centered for 750 width
+            this.label.Location = new System.Drawing.Point(160, 20);
             this.label.Name = "label";
             this.label.Size = new System.Drawing.Size(429, 100);
             this.label.TabIndex = 0;
             this.label.Text = "Library Management System\n(Team 4)";
             this.label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.BackColor = System.Drawing.Color.AliceBlue;
             
             //
             // tbox (SQL Connection Status)
             //
             this.tbox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.tbox.Location = new System.Drawing.Point(225, 140); // Centered for 750 width
+            this.tbox.Location = new System.Drawing.Point(225, 140); 
             this.tbox.Name = "tbox";
             this.tbox.ReadOnly = true;
             this.tbox.Multiline = true;
@@ -55,6 +58,21 @@ namespace LibrarySystem
             this.tbox.TabIndex = 5;
             this.tbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.tbox.Text = "Checking SQL connection...";
+
+            // 
+            // pic (University Logo)
+            // 
+            this.pic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pic.ImageLocation = "Logo.png"; // Tells the app to look for this file
+            this.pic.Location = new System.Drawing.Point(175, 190); // Centered nicely under the text box
+            this.pic.Name = "pic";
+            this.pic.Size = new System.Drawing.Size(400, 280);
+            this.pic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom; // Keeps aspect ratio perfect
+            this.pic.TabIndex = 6;
+            this.pic.TabStop = false;
+            
             
             // 
             // btnManageBooksPage
@@ -121,8 +139,11 @@ namespace LibrarySystem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(750, 600); // Widened to 750 to fit 5 buttons perfectly
+            this.BackColor = System.Drawing.Color.AliceBlue; // Set background to white to match the logo background seamlessly
+            this.ClientSize = new System.Drawing.Size(750, 600);
+            this.MinimumSize = new System.Drawing.Size(760, 600); 
             
+            this.Controls.Add(this.pic); // Added Picture Box
             this.Controls.Add(this.tbox); 
             this.Controls.Add(this.btnManagePublishers);
             this.Controls.Add(this.btnManageStaff);
@@ -133,6 +154,8 @@ namespace LibrarySystem
             
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            
+            ((System.ComponentModel.ISupportInitialize)(this.pic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
@@ -146,5 +169,6 @@ namespace LibrarySystem
         private System.Windows.Forms.Button btnMainDeskPage;
         private System.Windows.Forms.Button btnManageStaff;
         private System.Windows.Forms.Button btnManagePublishers;
+        private System.Windows.Forms.PictureBox pic;
     }
 }
