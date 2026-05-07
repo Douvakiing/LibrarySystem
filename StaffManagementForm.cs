@@ -60,23 +60,45 @@ namespace LibrarySystem
                 return;
             }
 
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            try
             {
-                string query = "SELECT StaffID, Name, Phone, Password, Email FROM Staff WHERE StaffID = @id";
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@id", txtId.Text);
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dgvStaff.DataSource = dt;
+                using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+                {
+                    con.Open(); 
+                    
+                    SqlCommand checkID = new SqlCommand("SELECT StaffID FROM Staff WHERE StaffID=@id", con);
+                    checkID.Parameters.AddWithValue("@id", txtId.Text);
+                    
+                    if (checkID.ExecuteScalar() == null)
+                    {
+                        MessageBox.Show("No staff exists with this ID");
+                        return; // Stop searching if it doesn't exist
+                    }
+
+                    string query = "SELECT StaffID, Name, Phone, Password, Email FROM Staff WHERE StaffID = @id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@id", txtId.Text);
+                    
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    dgvStaff.DataSource = dt;
+                }
             }
+            catch(SqlException ex) { MessageBox.Show("Error: " + ex.Message); }
+        }
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            ClearInputs();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtId.Text) || string.IsNullOrWhiteSpace(txtName.Text))
+            // ENFORCING SCHEMA: ID, Name, Password, and Email cannot be empty
+            if (string.IsNullOrWhiteSpace(txtId.Text) || string.IsNullOrWhiteSpace(txtName.Text) || 
+                string.IsNullOrWhiteSpace(txtPassword.Text) || string.IsNullOrWhiteSpace(txtEmail.Text))
             {
-                MessageBox.Show("Staff ID and Name are required.");
+                MessageBox.Show("Staff ID, Name, Password, and Email are strictly required.", "Missing Information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -95,9 +117,11 @@ namespace LibrarySystem
                     
                     cmd.Parameters.AddWithValue("@id", staffId);
                     cmd.Parameters.AddWithValue("@name", txtName.Text);
-                    cmd.Parameters.AddWithValue("@phone", txtPhone.Text);
                     cmd.Parameters.AddWithValue("@password", txtPassword.Text);
                     cmd.Parameters.AddWithValue("@email", txtEmail.Text);
+                    
+                    // Handle NULL Phone properly
+                    cmd.Parameters.AddWithValue("@phone", string.IsNullOrWhiteSpace(txtPhone.Text) ? (object)DBNull.Value : txtPhone.Text);
 
                     con.Open();
                     cmd.ExecuteNonQuery();
@@ -115,10 +139,11 @@ namespace LibrarySystem
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            // Make sure they provided an ID to update
-            if (string.IsNullOrWhiteSpace(txtId.Text))
+            // ENFORCING SCHEMA: ID, Name, Password, and Email cannot be empty
+            if (string.IsNullOrWhiteSpace(txtId.Text) || string.IsNullOrWhiteSpace(txtName.Text) || 
+                string.IsNullOrWhiteSpace(txtPassword.Text) || string.IsNullOrWhiteSpace(txtEmail.Text))
             {
-                MessageBox.Show("Please enter the Staff ID you want to update.");
+                MessageBox.Show("Staff ID, Name, Password, and Email cannot be empty to perform an update.", "Missing Information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -126,19 +151,19 @@ namespace LibrarySystem
             {
                 using (SqlConnection con = new SqlConnection(Program.ConnectionString))
                 {
-                    // Update all fields for the specific StaffID
                     string query = @"UPDATE Staff 
                                      SET Name = @name, Phone = @phone, Password = @password, Email = @email 
                                      WHERE StaffID = @id";
                     
                     SqlCommand cmd = new SqlCommand(query, con);
                     
-                    // Map textboxes to the parameters
                     cmd.Parameters.AddWithValue("@id", txtId.Text);
                     cmd.Parameters.AddWithValue("@name", txtName.Text);
-                    cmd.Parameters.AddWithValue("@phone", txtPhone.Text);
                     cmd.Parameters.AddWithValue("@password", txtPassword.Text);
                     cmd.Parameters.AddWithValue("@email", txtEmail.Text);
+                    
+                    // Handle NULL Phone properly
+                    cmd.Parameters.AddWithValue("@phone", string.IsNullOrWhiteSpace(txtPhone.Text) ? (object)DBNull.Value : txtPhone.Text);
 
                     con.Open();
                     int rowsAffected = cmd.ExecuteNonQuery();
@@ -152,8 +177,8 @@ namespace LibrarySystem
                         MessageBox.Show("Staff ID not found. Could not update.");
                     }
 
-                    LoadStaffData(); // Refresh the grid
-                    ClearInputs();   // Clear the textboxes
+                    LoadStaffData(); 
+                    ClearInputs();   
                 }
             }
             catch (Exception ex)
@@ -194,14 +219,12 @@ namespace LibrarySystem
                 }
             }
         }
+
         private void dgvStaff_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Ensure they clicked a valid row (and not the top header row)
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = dgvStaff.Rows[e.RowIndex];
-                
-                // Auto-fill all the text boxes with the data from the clicked row!
                 txtId.Text = row.Cells["StaffID"].Value?.ToString();
                 txtName.Text = row.Cells["Name"].Value?.ToString();
                 txtPhone.Text = row.Cells["Phone"].Value?.ToString();

@@ -62,32 +62,52 @@ namespace LibrarySystem
                 return;
             }
 
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
-            {
-                string query = @"SELECT p.PublisherID, p.PublisherName, p.Email, p.Phone, pa.Address 
-                                 FROM Publisher p 
-                                 LEFT JOIN PublisherAddress pa ON p.PublisherID = pa.PublisherID 
-                                 WHERE p.PublisherID = @id";
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@id", txtId.Text);
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dgvPublishers.DataSource = dt;
+            try{
+                using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+                {
+                    con.Open(); 
+                        
+                        SqlCommand checkID = new SqlCommand("SELECT PublisherID FROM Publisher WHERE PublisherID=@id", con);
+                        checkID.Parameters.AddWithValue("@id", txtId.Text);
+                        
+                        if (checkID.ExecuteScalar() == null)
+                        {
+                            MessageBox.Show("No staff exists with this ID");
+                            return; // Stop searching if it doesn't exist
+                        }
+                    string query = @"SELECT p.PublisherID, p.PublisherName, p.Email, p.Phone, pa.Address 
+                                    FROM Publisher p 
+                                    LEFT JOIN PublisherAddress pa ON p.PublisherID = pa.PublisherID 
+                                    WHERE p.PublisherID = @id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@id", txtId.Text);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    dgvPublishers.DataSource = dt;
+                }
             }
+            catch(SqlException ex){ MessageBox.Show("Error: " + ex.Message); }
+        }
+        private void btnClear_Click(object sender,EventArgs e)
+        {
+            ClearInputs();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtId.Text) || string.IsNullOrWhiteSpace(txtName.Text))
+            // ENFORCING SCHEMA: ID, Name, Email, and Phone cannot be empty
+            if (string.IsNullOrWhiteSpace(txtId.Text) || string.IsNullOrWhiteSpace(txtName.Text) || 
+                string.IsNullOrWhiteSpace(txtEmail.Text) || string.IsNullOrWhiteSpace(txtPhone.Text))
             {
-                MessageBox.Show("Publisher ID and Name are required.");
+                MessageBox.Show("Publisher ID, Name, Email, and Phone are strictly required.", "Missing Information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!int.TryParse(txtId.Text, out int pubId))
+            // ENFORCING SCHEMA: PublisherID must be > 0
+            if (!int.TryParse(txtId.Text, out int pubId) || pubId <= 0)
             {
-                MessageBox.Show("Publisher ID must be a valid number.");
+                MessageBox.Show("Publisher ID must be a valid number greater than 0.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -126,9 +146,11 @@ namespace LibrarySystem
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtId.Text))
+            // ENFORCING SCHEMA: Cannot update if the required fields are cleared out
+            if (string.IsNullOrWhiteSpace(txtId.Text) || string.IsNullOrWhiteSpace(txtName.Text) || 
+                string.IsNullOrWhiteSpace(txtEmail.Text) || string.IsNullOrWhiteSpace(txtPhone.Text))
             {
-                MessageBox.Show("Please enter the Publisher ID you want to update.");
+                MessageBox.Show("Publisher ID, Name, Email, and Phone cannot be empty to perform an update.", "Missing Information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -138,7 +160,6 @@ namespace LibrarySystem
                 {
                     con.Open();
 
-                    // Step 1: Update the main Publisher table
                     string pubQuery = @"UPDATE Publisher 
                                         SET PublisherName = @name, Email = @email, Phone = @phone 
                                         WHERE PublisherID = @id";
@@ -151,15 +172,13 @@ namespace LibrarySystem
                     
                     int rowsAffected = cmdPub.ExecuteNonQuery();
 
-                    if (rowsAffected > 0) // If the publisher exists, proceed to update address
+                    if (rowsAffected > 0) 
                     {
-                        // Step 2: Clear out the old address
                         string delAddrQuery = "DELETE FROM PublisherAddress WHERE PublisherID = @id";
                         SqlCommand cmdDelAddr = new SqlCommand(delAddrQuery, con);
                         cmdDelAddr.Parameters.AddWithValue("@id", txtId.Text);
                         cmdDelAddr.ExecuteNonQuery();
 
-                        // Step 3: Insert the new address (if the textbox isn't empty)
                         if (!string.IsNullOrWhiteSpace(txtAddress.Text))
                         {
                             string insAddrQuery = "INSERT INTO PublisherAddress (Address, PublisherID) VALUES (@address, @id)";
@@ -176,8 +195,8 @@ namespace LibrarySystem
                         MessageBox.Show("Publisher ID not found. Could not update.");
                     }
 
-                    LoadPublisherData(); // Refresh the grid
-                    ClearInputs();       // Clear the textboxes
+                    LoadPublisherData(); 
+                    ClearInputs();       
                 }
             }
             catch (Exception ex)
@@ -185,6 +204,7 @@ namespace LibrarySystem
                 MessageBox.Show("Database error: " + ex.Message);
             }
         }
+
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (dgvPublishers.SelectedRows.Count == 0)
@@ -222,14 +242,12 @@ namespace LibrarySystem
                 }
             }
         }
+
         private void dgvPublishers_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // If they clicked a valid row (not the header)
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = dgvPublishers.Rows[e.RowIndex];
-                
-                // Auto-fill all the text boxes!
                 txtId.Text = row.Cells["PublisherID"].Value?.ToString();
                 txtName.Text = row.Cells["PublisherName"].Value?.ToString();
                 txtEmail.Text = row.Cells["Email"].Value?.ToString();

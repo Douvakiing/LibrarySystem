@@ -24,6 +24,7 @@ namespace LibrarySystem
             this.btnSearch = new System.Windows.Forms.Button();
             this.chkSearchMode = new System.Windows.Forms.CheckBox();
             this.btnBack = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
 
             System.Windows.Forms.Label lblId = new System.Windows.Forms.Label();
             System.Windows.Forms.Label lblName = new System.Windows.Forms.Label();
@@ -73,6 +74,8 @@ namespace LibrarySystem
             this.chkSearchMode.Location = new System.Drawing.Point(16, 385);
             this.chkSearchMode.Text = "Search by ID";
             this.chkSearchMode.CheckedChanged += new System.EventHandler(this.chkSearchMode_CheckedChanged);
+            
+            this.btnClear.Location=new System.Drawing.Point(16,410);this.btnClear.Size = new System.Drawing.Size(100, 30); this.btnClear.Text = "Clear input"; this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAdd.Location = new System.Drawing.Point(620, 287); this.btnAdd.Size = new System.Drawing.Size(100, 30); this.btnAdd.Text = "Add Pub"; this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -102,6 +105,7 @@ namespace LibrarySystem
             this.Controls.Add(this.btnAdd); this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDelete); this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnBack);
+            this.Controls.Add(this.btnClear);
             this.Name = "PublisherManagementForm";
             this.Text = "Publisher Management";
             this.Load += new System.EventHandler(this.PublisherManagementForm_Load);
@@ -123,6 +127,7 @@ namespace LibrarySystem
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.CheckBox chkSearchMode;
+        private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnBack;
     }
 }

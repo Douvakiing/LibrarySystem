@@ -24,6 +24,7 @@ namespace LibrarySystem
             this.btnSearch = new System.Windows.Forms.Button();
             this.chkSearchMode = new System.Windows.Forms.CheckBox();
             this.btnBack = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
 
             System.Windows.Forms.Label lblId = new System.Windows.Forms.Label();
             System.Windows.Forms.Label lblName = new System.Windows.Forms.Label();
@@ -91,6 +92,7 @@ namespace LibrarySystem
             this.btnBack.Size = new System.Drawing.Size(100, 30);
             this.btnBack.Text = "< Back";
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
+            this.btnClear.Location=new System.Drawing.Point(16,410);this.btnClear.Size = new System.Drawing.Size(100, 30); this.btnClear.Text = "Clear input"; this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
 
             this.ClientSize = new System.Drawing.Size(784, 561);
             this.Controls.Add(lblId); this.Controls.Add(this.txtId);
@@ -102,9 +104,11 @@ namespace LibrarySystem
             this.Controls.Add(this.btnAdd); this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDelete); this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnBack);
+            this.Controls.Add(this.btnClear);
             this.Name = "StaffManagementForm";
             this.Text = "Staff Management";
             this.Load += new System.EventHandler(this.StaffManagementForm_Load);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 
             ((System.ComponentModel.ISupportInitialize)(this.dgvStaff)).EndInit();
             this.ResumeLayout(false);
@@ -123,5 +127,6 @@ namespace LibrarySystem
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.CheckBox chkSearchMode;
         private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Button btnClear;
     }
 }
