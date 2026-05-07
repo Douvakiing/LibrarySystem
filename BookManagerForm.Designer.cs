@@ -22,6 +22,7 @@
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnDashboard = new System.Windows.Forms.Button();
+            this.btnManageStock = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).BeginInit();
             this.SuspendLayout();
             
@@ -51,9 +52,8 @@
             // 
             // btnAdd
             // 
-            // DYNAMIC FIX: Anchor Bottom so it moves down dynamically
             this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnAdd.Location = new System.Drawing.Point(209, 490);
+            this.btnAdd.Location = new System.Drawing.Point(74, 490);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(103, 30);
             this.btnAdd.TabIndex = 13;
@@ -65,7 +65,7 @@
             // btnUpdate
             // 
             this.btnUpdate.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnUpdate.Location = new System.Drawing.Point(350, 490);
+            this.btnUpdate.Location = new System.Drawing.Point(251, 490);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(104, 30);
             this.btnUpdate.TabIndex = 14;
@@ -77,14 +77,27 @@
             // btnDelete
             // 
             this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnDelete.Location = new System.Drawing.Point(491, 490);
+            this.btnDelete.Location = new System.Drawing.Point(429, 490);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(103, 30);
             this.btnDelete.TabIndex = 15;
             this.btnDelete.Text = "Delete Book";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            
+
+            //
+            // btnManageStock
+            //
+            this.btnManageStock.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnManageStock.Location = new System.Drawing.Point(606, 490);
+            this.btnManageStock.Name = "btnManageStock";
+            this.btnManageStock.Size = new System.Drawing.Size(104, 30);
+            this.btnManageStock.AutoSize=true;
+            this.btnManageStock.TabIndex = 16;
+            this.btnManageStock.Text = "Manage Stock";
+            this.btnManageStock.UseVisualStyleBackColor = true;
+            this.btnManageStock.Click += new System.EventHandler(this.btnManageStock_Click);
+
             // 
             // btnDashboard
             // 
@@ -108,6 +121,7 @@
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnAdd);
+            this.Controls.Add(this.btnManageStock);
             this.Controls.Add(this.dgvBooks);
             
             this.Name = "BookManagerForm";
@@ -125,5 +139,6 @@
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnDashboard;
+        private System.Windows.Forms.Button btnManageStock;
     }
 }

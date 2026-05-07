@@ -65,6 +65,12 @@ namespace LibrarySystem
            popup.ShowDialog(); // ShowDialog freezes the main form until the popup is closed
            RefreshGrid();      // Refresh the grid once the user is done updating
         }
+        private void btnManageStock_Click(object sender,EventArgs e)
+        {
+            StockManagerForm popup = new StockManagerForm();
+            popup.ShowDialog();
+            RefreshGrid();
+        }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
