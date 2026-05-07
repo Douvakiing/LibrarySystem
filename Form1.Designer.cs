@@ -26,11 +26,8 @@ namespace LibrarySystem
             this.btnManageStaff = new System.Windows.Forms.Button();
             this.btnManagePublishers = new System.Windows.Forms.Button();
             this.tbox = new System.Windows.Forms.TextBox();
-            this.pic = new System.Windows.Forms.PictureBox();
             
-            // Required for PictureBox initialization
-            ((System.ComponentModel.ISupportInitialize)(this.pic)).BeginInit();
-            this.SuspendLayout();
+            
             
             // 
             // label
@@ -59,19 +56,6 @@ namespace LibrarySystem
             this.tbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.tbox.Text = "Checking SQL connection...";
 
-            // 
-            // pic (University Logo)
-            // 
-            this.pic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pic.ImageLocation = "Logo.png"; // Tells the app to look for this file
-            this.pic.Location = new System.Drawing.Point(175, 190); // Centered nicely under the text box
-            this.pic.Name = "pic";
-            this.pic.Size = new System.Drawing.Size(400, 280);
-            this.pic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom; // Keeps aspect ratio perfect
-            this.pic.TabIndex = 6;
-            this.pic.TabStop = false;
             
             
             // 
@@ -143,7 +127,6 @@ namespace LibrarySystem
             this.ClientSize = new System.Drawing.Size(750, 600);
             this.MinimumSize = new System.Drawing.Size(760, 600); 
             
-            this.Controls.Add(this.pic); // Added Picture Box
             this.Controls.Add(this.tbox); 
             this.Controls.Add(this.btnManagePublishers);
             this.Controls.Add(this.btnManageStaff);
@@ -155,7 +138,6 @@ namespace LibrarySystem
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             
-            ((System.ComponentModel.ISupportInitialize)(this.pic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
@@ -169,6 +151,5 @@ namespace LibrarySystem
         private System.Windows.Forms.Button btnMainDeskPage;
         private System.Windows.Forms.Button btnManageStaff;
         private System.Windows.Forms.Button btnManagePublishers;
-        private System.Windows.Forms.PictureBox pic;
     }
 }
