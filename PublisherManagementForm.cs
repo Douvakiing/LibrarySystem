@@ -10,6 +10,7 @@ namespace LibrarySystem
         public PublisherManagementForm()
         {
             InitializeComponent();
+            this.MinimumSize = new System.Drawing.Size(1200, 720);
         }
 
         private void PublisherManagementForm_Load(object sender, EventArgs e)

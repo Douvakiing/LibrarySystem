@@ -2,15 +2,8 @@
 {
     partial class MemberDirectoryForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,12 +13,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.dgvMembers = new System.Windows.Forms.DataGridView();
@@ -35,9 +22,15 @@
             this.btnDashboard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMembers)).BeginInit();
             this.SuspendLayout();
+            
             // 
             // dgvMembers
             // 
+            // DYNAMIC FIX: Anchor to all 4 sides so it stretches!
+            this.dgvMembers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvMembers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvMembers.AllowUserToAddRows = false;
             this.dgvMembers.AllowUserToDeleteRows = false;
             this.dgvMembers.AllowUserToOrderColumns = true;
@@ -49,38 +42,46 @@
             this.dgvMembers.ReadOnly = true;
             this.dgvMembers.RowHeadersWidth = 51;
             this.dgvMembers.RowTemplate.Height = 24;
-            this.dgvMembers.Size = new System.Drawing.Size(776, 220);
+            this.dgvMembers.Size = new System.Drawing.Size(776, 320); // Slightly taller default
             this.dgvMembers.TabIndex = 0;
+            
             // 
             // btnAddMember
             // 
-            this.btnAddMember.Location = new System.Drawing.Point(197, 311);
+            // DYNAMIC FIX: Anchor Bottom so it moves down
+            this.btnAddMember.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnAddMember.Location = new System.Drawing.Point(197, 381);
             this.btnAddMember.Name = "btnAddMember";
-            this.btnAddMember.Size = new System.Drawing.Size(121, 23);
+            this.btnAddMember.Size = new System.Drawing.Size(121, 30);
             this.btnAddMember.TabIndex = 15;
             this.btnAddMember.Text = "Add Member";
             this.btnAddMember.UseVisualStyleBackColor = true;
             this.btnAddMember.Click += new System.EventHandler(this.btnAddMember_Click);
-            // 
-            // btnDeleteMember
-            // 
-            this.btnDeleteMember.Location = new System.Drawing.Point(495, 311);
-            this.btnDeleteMember.Name = "btnDeleteMember";
-            this.btnDeleteMember.Size = new System.Drawing.Size(131, 23);
-            this.btnDeleteMember.TabIndex = 16;
-            this.btnDeleteMember.Text = "Delete Member";
-            this.btnDeleteMember.UseVisualStyleBackColor = true;
-            this.btnDeleteMember.Click += new System.EventHandler(this.btnDeleteMember_Click);
+            
             // 
             // btnUpdateMember
             // 
-            this.btnUpdateMember.Location = new System.Drawing.Point(350, 311);
+            this.btnUpdateMember.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnUpdateMember.Location = new System.Drawing.Point(350, 381);
             this.btnUpdateMember.Name = "btnUpdateMember";
-            this.btnUpdateMember.Size = new System.Drawing.Size(126, 23);
+            this.btnUpdateMember.Size = new System.Drawing.Size(126, 30);
             this.btnUpdateMember.TabIndex = 17;
             this.btnUpdateMember.Text = "Update Member";
             this.btnUpdateMember.UseVisualStyleBackColor = true;
             this.btnUpdateMember.Click += new System.EventHandler(this.btnUpdateMember_Click);
+
+            // 
+            // btnDeleteMember
+            // 
+            this.btnDeleteMember.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnDeleteMember.Location = new System.Drawing.Point(495, 381);
+            this.btnDeleteMember.Name = "btnDeleteMember";
+            this.btnDeleteMember.Size = new System.Drawing.Size(131, 30);
+            this.btnDeleteMember.TabIndex = 16;
+            this.btnDeleteMember.Text = "Delete Member";
+            this.btnDeleteMember.UseVisualStyleBackColor = true;
+            this.btnDeleteMember.Click += new System.EventHandler(this.btnDeleteMember_Click);
+            
             // 
             // btnDashboard
             // 
@@ -88,30 +89,31 @@
             this.btnDashboard.Name = "btnDashboard";
             this.btnDashboard.Size = new System.Drawing.Size(177, 23);
             this.btnDashboard.TabIndex = 18;
-            this.btnDashboard.Text = "Back To Dashboard";
+            this.btnDashboard.Text = "< Back To Dashboard";
             this.btnDashboard.UseVisualStyleBackColor = true;
             this.btnDashboard.Click += new System.EventHandler(this.btnDashboard_Click);
+            
             // 
             // MemberDirectoryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.MinimumSize = new System.Drawing.Size(800, 450); // Prevents squishing!
             this.Controls.Add(this.btnDashboard);
             this.Controls.Add(this.btnUpdateMember);
             this.Controls.Add(this.btnDeleteMember);
             this.Controls.Add(this.btnAddMember);
             this.Controls.Add(this.dgvMembers);
             this.Name = "MemberDirectoryForm";
-            this.Text = "MemberDirectoryForm";
+            this.Text = "Member Directory";
             this.Load += new System.EventHandler(this.MemberDirectoryForm_Load);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             ((System.ComponentModel.ISupportInitialize)(this.dgvMembers)).EndInit();
             this.ResumeLayout(false);
-
         }
 
-        #endregion
+        
 
         private System.Windows.Forms.DataGridView dgvMembers;
         private System.Windows.Forms.Button btnAddMember;

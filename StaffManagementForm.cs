@@ -10,6 +10,7 @@ namespace LibrarySystem
         public StaffManagementForm()
         {
             InitializeComponent();
+            this.MinimumSize = new System.Drawing.Size(1200, 720);
         }
 
         private void StaffManagementForm_Load(object sender, EventArgs e)

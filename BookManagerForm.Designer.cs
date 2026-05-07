@@ -2,15 +2,8 @@
 {
     partial class BookManagerForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,10 +15,6 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.dgvBooks = new System.Windows.Forms.DataGridView();
@@ -35,9 +24,15 @@
             this.btnDashboard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).BeginInit();
             this.SuspendLayout();
+            
             // 
             // dgvBooks
             // 
+            // DYNAMIC FIX: Anchor to all 4 sides so it stretches!
+            this.dgvBooks.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvBooks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvBooks.AllowUserToAddRows = false;
             this.dgvBooks.AllowUserToDeleteRows = false;
             this.dgvBooks.AllowUserToOrderColumns = true;
@@ -50,71 +45,77 @@
             this.dgvBooks.RowHeadersWidth = 51;
             this.dgvBooks.RowTemplate.Height = 24;
             this.dgvBooks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvBooks.Size = new System.Drawing.Size(776, 232);
+            this.dgvBooks.Size = new System.Drawing.Size(760, 420); // Taller default size
             this.dgvBooks.TabIndex = 0;
+            
             // 
             // btnAdd
             // 
-            this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnAdd.Location = new System.Drawing.Point(209, 382);
+            // DYNAMIC FIX: Anchor Bottom so it moves down dynamically
+            this.btnAdd.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnAdd.Location = new System.Drawing.Point(209, 490);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(103, 24);
+            this.btnAdd.Size = new System.Drawing.Size(103, 30);
             this.btnAdd.TabIndex = 13;
             this.btnAdd.Text = "Add Book";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnUpdate.Location = new System.Drawing.Point(350, 382);
+            this.btnUpdate.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnUpdate.Location = new System.Drawing.Point(350, 490);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(104, 24);
+            this.btnUpdate.Size = new System.Drawing.Size(104, 30);
             this.btnUpdate.TabIndex = 14;
             this.btnUpdate.Text = "Update Book";
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            
             // 
             // btnDelete
             // 
-            this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnDelete.Location = new System.Drawing.Point(491, 382);
+            this.btnDelete.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnDelete.Location = new System.Drawing.Point(491, 490);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(103, 24);
+            this.btnDelete.Size = new System.Drawing.Size(103, 30);
             this.btnDelete.TabIndex = 15;
             this.btnDelete.Text = "Delete Book";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            
             // 
             // btnDashboard
             // 
-            this.btnDashboard.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnDashboard.Location = new System.Drawing.Point(12, 12);
             this.btnDashboard.Name = "btnDashboard";
             this.btnDashboard.Size = new System.Drawing.Size(202, 32);
             this.btnDashboard.TabIndex = 16;
-            this.btnDashboard.Text = "Back to Dashboard";
+            this.btnDashboard.Text = "< Back to Dashboard";
             this.btnDashboard.UseVisualStyleBackColor = true;
             this.btnDashboard.Click += new System.EventHandler(this.btnDashboard_Click);
+            
             // 
             // BookManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 559);
+            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.MinimumSize = new System.Drawing.Size(800, 600); // Prevents squishing!
+            
             this.Controls.Add(this.btnDashboard);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.dgvBooks);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            
             this.Name = "BookManagerForm";
-            this.Text = "BookManagerForm";
+            this.Text = "Book Management";
             this.Load += new System.EventHandler(this.BookManagerForm_Load);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         #endregion
