@@ -18,7 +18,6 @@ namespace LibrarySystem
             InitializeComponent();
         }
 
-
         private void chkFirstName_CheckedChanged(object sender, EventArgs e)
         {
             txtFirstName.Enabled = chkFirstName.Checked;
@@ -51,10 +50,10 @@ namespace LibrarySystem
 
         private void btnUpdateMember_Click(object sender, EventArgs e)
         {
-            // 1. Validate that the Search ID is provided
-            if (string.IsNullOrWhiteSpace(txtMemberID.Text))
+            // 1. Validate that the Search ID is provided and is a valid number
+            if (!int.TryParse(txtMemberID.Text, out int memberId) || memberId <= 0)
             {
-                MessageBox.Show("Please enter the Member ID you wish to update.");
+                MessageBox.Show("Please enter a valid positive Member ID to update.", "Invalid ID", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -98,7 +97,7 @@ namespace LibrarySystem
                 // 3. Exit if nothing was selected for update
                 if (columnsToUpdate.Count == 0)
                 {
-                    MessageBox.Show("No fields selected for update.");
+                    MessageBox.Show("No fields selected for update.", "Nothing to do", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
@@ -106,7 +105,7 @@ namespace LibrarySystem
                 string query = "UPDATE Member SET " + string.Join(", ", columnsToUpdate) + " WHERE MemberID = @id";
                 cmd.CommandText = query;
                 cmd.Connection = con;
-                cmd.Parameters.AddWithValue("@id", txtMemberID.Text);
+                cmd.Parameters.AddWithValue("@id", memberId); // Using safely parsed ID
 
                 try
                 {
@@ -115,17 +114,29 @@ namespace LibrarySystem
 
                     if (result > 0)
                     {
-                        MessageBox.Show("Member record updated successfully!");
+                        MessageBox.Show("Member record updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();
                     }
                     else
                     {
-                        MessageBox.Show("Member ID not found.");
+                        MessageBox.Show("Member ID not found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    // THE DIPLOMAT: Translating SQL Errors to English
+                    if (ex.Number == 547)
+                    {
+                        MessageBox.Show("Update failed due to database rules. Ensure names aren't empty.", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("SQL Error: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show("Application Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

@@ -57,13 +57,12 @@ namespace LibrarySystem
         {
             if (string.IsNullOrWhiteSpace(txtISBN.Text))
             {
-                MessageBox.Show("Please enter the ISBN of the book you wish to update.");
+                MessageBox.Show("Please enter the ISBN of the book you wish to update.", "Missing ISBN", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             using (SqlConnection con = new SqlConnection(Program.ConnectionString))
             {
-                // 1. Build the dynamic SET clause
                 List<string> columnsToUpdate = new List<string>();
                 SqlCommand cmd = new SqlCommand();
 
@@ -79,22 +78,31 @@ namespace LibrarySystem
                 }
                 if (chkAuthor.Checked)
                 {
-                    columnsToUpdate.Add("AuthorName = @author"); // Matches schema
+                    columnsToUpdate.Add("AuthorName = @author");
                     cmd.Parameters.AddWithValue("@author", txtAuthor.Text);
                 }
                 if (chkPages.Checked)
                 {
-                    columnsToUpdate.Add("NumberOfPages = @pages"); // Matches schema
-                    cmd.Parameters.AddWithValue("@pages", int.Parse(txtPages.Text));
+                    // Pre-validation to prevent C# crash
+                    if (int.TryParse(txtPages.Text, out int pages) && pages > 0)
+                    {
+                        columnsToUpdate.Add("NumberOfPages = @pages");
+                        cmd.Parameters.AddWithValue("@pages", pages);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter a valid number greater than 0 for Pages.", "Invalid Number", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return; // Stop the update
+                    }
                 }
                 if (chkStaffId.Checked)
                 {
-                    columnsToUpdate.Add("StaffID = @staff"); // Foreign Key
+                    columnsToUpdate.Add("StaffID = @staff");
                     cmd.Parameters.AddWithValue("@staff", txtStaffId.Text);
                 }
                 if (chkPublishedId.Checked)
                 {
-                    columnsToUpdate.Add("PublisherID = @pub"); // Foreign Key
+                    columnsToUpdate.Add("PublisherID = @pub");
                     cmd.Parameters.AddWithValue("@pub", txtPublisherId.Text);
                 }
                 if (chkPubDate.Checked)
@@ -105,11 +113,10 @@ namespace LibrarySystem
 
                 if (columnsToUpdate.Count == 0)
                 {
-                    MessageBox.Show("No fields selected for update.");
+                    MessageBox.Show("No fields selected for update.", "Nothing to do", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                // 2. Finalize the Query
                 string query = "UPDATE Books SET " + string.Join(", ", columnsToUpdate) + " WHERE ISBN = @isbn";
                 cmd.CommandText = query;
                 cmd.Connection = con;
@@ -119,13 +126,34 @@ namespace LibrarySystem
                 {
                     con.Open();
                     int result = cmd.ExecuteNonQuery();
-                    if (result > 0) MessageBox.Show("Book updated successfully!");
-                    else MessageBox.Show("Book not found.");
-                    this.Close();
+                    if (result > 0)
+                    {
+                        MessageBox.Show("Book updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Book not found. Check the ISBN.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    // THE DIPLOMAT: Translating SQL Errors to English
+                    if (ex.Number == 547)
+                    {
+                        if (ex.Message.Contains("PublisherID") || ex.Message.Contains("StaffID"))
+                            MessageBox.Show("The Staff ID or Publisher ID you entered does not exist.", "Invalid ID", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        else
+                            MessageBox.Show("Update failed due to database rules (e.g., empty text).", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("SQL Error: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show("Application Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
