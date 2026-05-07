@@ -39,6 +39,7 @@ namespace LibrarySystem
                                "VALUES (@isbn, @title, @pages, @cat, @author, @staff, @pub)";
 
                 SqlCommand cmd = new SqlCommand(query, con);
+                SqlCommand addDefaultOneCopy = new SqlCommand("INSERT INTO BookCopy (CopyNumber, ISBN , BookState) VALUES (@copynumber,@isbn,@bookstate)",con);
                 cmd.Parameters.AddWithValue("@isbn", txtISBN.Text);
                 cmd.Parameters.AddWithValue("@title", txtTitle.Text);
                 cmd.Parameters.AddWithValue("@pages", int.Parse(txtPages.Text)); // Converts string to int
@@ -46,11 +47,15 @@ namespace LibrarySystem
                 cmd.Parameters.AddWithValue("@author", txtAuthor.Text);
                 cmd.Parameters.AddWithValue("@staff", txtStaffId.Text); // Must be a valid StaffID
                 cmd.Parameters.AddWithValue("@pub", txtPublisherId.Text);     // Must be a valid PublisherID
+                addDefaultOneCopy.Parameters.AddWithValue("@copynumber",1);
+                addDefaultOneCopy.Parameters.AddWithValue("@isbn",txtISBN.Text);
+                addDefaultOneCopy.Parameters.AddWithValue("@bookstate","Available");
 
                 try
                 {
                     con.Open();
                     cmd.ExecuteNonQuery();
+                    addDefaultOneCopy.ExecuteScalar();
                     MessageBox.Show("Book added to library!");
                     this.Close(); // Close the popup after saving
                 }
