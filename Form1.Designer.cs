@@ -114,7 +114,8 @@ namespace LibrarySystem
             this.btnManagePublishers.Name = "btnManagePublishers";
             this.btnManagePublishers.Size = new System.Drawing.Size(120, 46);
             this.btnManagePublishers.TabIndex = 5;
-            this.btnManagePublishers.Text = "Manage Pubs";
+            this.btnManagePublishers.Text = "Manage Publishers";
+            this.btnManagePublishers.AutoSize=true;
             this.btnManagePublishers.UseVisualStyleBackColor = true;
             this.btnManagePublishers.Click += new System.EventHandler(this.btnManagePublishers_Click);
             
