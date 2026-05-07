@@ -36,7 +36,7 @@ namespace LibrarySystem
                     FROM BookCopy bc
                     JOIN Books b ON bc.ISBN = b.ISBN
                     WHERE bc.BookState = 'Available'
-                    ORDER BY b.Title";
+                    ORDER BY bc.ISBN";
 
                 SqlDataAdapter da = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();

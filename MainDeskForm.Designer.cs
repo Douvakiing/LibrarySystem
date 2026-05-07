@@ -52,7 +52,7 @@
             // ==========================================
             this.grpIssue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             this.grpIssue.Location = new System.Drawing.Point(20, 20);
-            this.grpIssue.Size = new System.Drawing.Size(350, 260);
+            this.grpIssue.Size = new System.Drawing.Size(350, 320);
             this.grpIssue.Name = "grpIssue";
             this.grpIssue.Text = "Check-Out / Issue Book";
             this.grpIssue.TabIndex = 0;
@@ -84,7 +84,7 @@
             // ==========================================
             this.grpAvailable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.grpAvailable.Location = new System.Drawing.Point(390, 20);
-            this.grpAvailable.Size = new System.Drawing.Size(770, 260);
+            this.grpAvailable.Size = new System.Drawing.Size(770, 320);
             this.grpAvailable.Name = "grpAvailable";
             this.grpAvailable.Text = "Available Inventory (Click to select)";
             this.grpAvailable.TabIndex = 1;
@@ -106,7 +106,7 @@
             // BOTTOM LEFT: RETURN DROP BOX
             // ==========================================
             this.grpReturn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
-            this.grpReturn.Location = new System.Drawing.Point(20, 300);
+            this.grpReturn.Location = new System.Drawing.Point(20, 350);
             this.grpReturn.Size = new System.Drawing.Size(350, 260);
             this.grpReturn.Name = "grpReturn";
             this.grpReturn.Text = "Drop Box / Return Book";
@@ -133,7 +133,7 @@
             // BOTTOM RIGHT: ACTIVE LOANS RADAR
             // ==========================================
             this.grpRadar.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpRadar.Location = new System.Drawing.Point(390, 300);
+            this.grpRadar.Location = new System.Drawing.Point(390, 350);
             this.grpRadar.Size = new System.Drawing.Size(770, 300);
             this.grpRadar.Name = "grpRadar";
             this.grpRadar.Text = "Active Loans Radar (Click to select return)";
