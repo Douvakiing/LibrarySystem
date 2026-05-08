@@ -24,43 +24,39 @@ namespace LibrarySystem
 
         private void CheckDatabaseConnection()
         {
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
             try
             {
-                // Attempt to connect to the SQL Server
-                using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+                con.Open();
+                
+                SqlCommand cmd = new SqlCommand("SELECT DB_NAME()", con);
+                string currentDb = cmd.ExecuteScalar()?.ToString();
+                
+                if (currentDb != null && currentDb.Equals("LibrarySystem", StringComparison.OrdinalIgnoreCase))
                 {
-                    con.Open();
-                    
-                    // Ask SQL Server which database is currently active
-                    using (SqlCommand cmd = new SqlCommand("SELECT DB_NAME()", con))
-                    {
-                        string currentDb = cmd.ExecuteScalar()?.ToString();
-                        
-                        // Check if it is EXACTLY "LibrarySystem"
-                        if (currentDb != null && currentDb.Equals("LibrarySystem", StringComparison.OrdinalIgnoreCase))
-                        {
-                            // Success!
-                            tbox.Text = "Connected to LibrarySystem DB!";
-                            tbox.BackColor = Color.LightGreen;
-                        }
-                        else
-                        {
-                            // It connected to the server, but the database is wrong or missing
-                            tbox.Text = $"Wrong DB: {currentDb}";
-                            tbox.BackColor = Color.LightCoral;
-                            
-                            LockSystem($"Connected to SQL Server, but the target database is missing or incorrect.\n\nExpected: LibrarySystem\nFound: {currentDb}");
-                        }
-                    }
+                    tbox.Text = "Connected to LibrarySystem DB!";
+                    tbox.BackColor = Color.LightGreen;
+                }
+                else
+                {
+                    tbox.Text = $"Wrong DB: {currentDb}";
+                    tbox.BackColor = Color.LightCoral;
+                    LockSystem($"Connected to SQL Server, but the target database is missing or incorrect.\n\nExpected: LibrarySystem\nFound: {currentDb}");
                 }
             }
             catch (SqlException ex)
             {
-                // If it fails to connect to SQL Server entirely (e.g., server is down)
                 tbox.Text = "SQL Connection Failed!";
                 tbox.BackColor = Color.LightCoral;
-                
                 LockSystem("Could not connect to the SQL Server.\n\nError Details:\n" + ex.Message);
+            }
+            finally
+            {
+                // Check if connection is open before trying to close it, just in case Open() failed
+                if (con.State == ConnectionState.Open)
+                {
+                    con.Close();
+                }
             }
         }
         
