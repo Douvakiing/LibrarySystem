@@ -29,7 +29,13 @@ namespace LibrarySystem
             {
                 con.Open();
                 
-                SqlCommand cmd = new SqlCommand("SELECT DB_NAME()", con);
+                // 1. Point to the stored procedure instead of raw SQL
+                SqlCommand cmd = new SqlCommand("sp_GetCurrentDatabase", con);
+                
+                // 2. Tell ADO.NET that this is a stored procedure
+                cmd.CommandType = CommandType.StoredProcedure;
+                
+                // 3. Execute just like before
                 string currentDb = cmd.ExecuteScalar()?.ToString();
                 
                 if (currentDb != null && currentDb.Equals("LibrarySystem", StringComparison.OrdinalIgnoreCase))
@@ -52,7 +58,6 @@ namespace LibrarySystem
             }
             finally
             {
-                // Check if connection is open before trying to close it, just in case Open() failed
                 if (con.State == ConnectionState.Open)
                 {
                     con.Close();
