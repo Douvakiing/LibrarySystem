@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 #vscode folder
 .vscode
+compilequeries.py
+Extracted_SQL_Blocks.txt

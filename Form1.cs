@@ -97,7 +97,6 @@ namespace LibrarySystem
             this.Hide();
         }
 
-        // --- NEW BUTTONS TO REPLACE ADMIN PANEL ---
         private void btnManageStaff_Click(object sender, EventArgs e)
         {
             // Assuming you named your split form 'StaffManagementForm'

@@ -137,17 +137,11 @@
     <Compile Include="PublisherManagementForm.Designer.cs">
       <DependentUpon>PublisherManagementForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AdminPanelForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="StockManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="StockManagerForm.Designer.cs">
       <DependentUpon>StockManagerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AdminPanelForm.Designer.cs">
-      <DependentUpon>AdminPanelForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
