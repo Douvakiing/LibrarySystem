@@ -50,61 +50,83 @@ namespace LibrarySystem
                 return;
             }
 
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            // STRICT COMPLIANCE: No 'using' block
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
-                try
+                con.Open();
+
+                // --- UNIFIED PRE-CHECK: STAFF ---
+                SqlCommand checkStaff = new SqlCommand("SELECT COUNT(*) FROM Staff WHERE StaffID = @id", con);
+                SqlParameter pStaffId = new SqlParameter("@id", sId);
+                checkStaff.Parameters.Add(pStaffId);
+                
+                if ((int)checkStaff.ExecuteScalar() == 0)
                 {
-                    con.Open();
-
-                    // --- UNIFIED PRE-CHECK: STAFF ---
-                    SqlCommand checkStaff = new SqlCommand("SELECT COUNT(*) FROM Staff WHERE StaffID = @id", con);
-                    checkStaff.Parameters.AddWithValue("@id", sId);
-                    if ((int)checkStaff.ExecuteScalar() == 0)
-                    {
-                        MessageBox.Show($"Staff ID '{sId}' does not exist in the system. Please check your spelling.", "Invalid Staff ID", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    // --- UNIFIED PRE-CHECK: PUBLISHER ---
-                    SqlCommand checkPub = new SqlCommand("SELECT COUNT(*) FROM Publisher WHERE PublisherID = @id", con);
-                    checkPub.Parameters.AddWithValue("@id", pId);
-                    if ((int)checkPub.ExecuteScalar() == 0)
-                    {
-                        MessageBox.Show($"Publisher ID '{pId}' does not exist in the system. Please verify the ID.", "Invalid Publisher ID", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    // --- EXECUTE INSERT ---
-                    string query = "INSERT INTO Books (ISBN, Title, NumberOfPages, Category, AuthorName, StaffID, PublisherID) " +
-                                   "VALUES (@isbn, @title, @pages, @cat, @author, @staff, @pub)";
-
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@isbn", txtISBN.Text);
-                    cmd.Parameters.AddWithValue("@title", txtTitle.Text);
-                    cmd.Parameters.AddWithValue("@pages", pages);
-                    cmd.Parameters.AddWithValue("@cat", txtCategory.Text);
-                    cmd.Parameters.AddWithValue("@author", txtAuthor.Text);
-                    cmd.Parameters.AddWithValue("@staff", sId);
-                    cmd.Parameters.AddWithValue("@pub", pId);
-
-                    SqlCommand addCopy = new SqlCommand("INSERT INTO BookCopy (CopyNumber, ISBN, BookState) VALUES (1, @isbn, 'Available')", con);
-                    addCopy.Parameters.AddWithValue("@isbn", txtISBN.Text);
-
-                    cmd.ExecuteNonQuery();
-                    addCopy.ExecuteNonQuery();
-
-                    MessageBox.Show("Book added to library successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
+                    MessageBox.Show($"Staff ID '{sId}' does not exist in the system. Please check your spelling.", "Invalid Staff ID", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-                catch (SqlException ex)
+
+                // --- UNIFIED PRE-CHECK: PUBLISHER ---
+                SqlCommand checkPub = new SqlCommand("SELECT COUNT(*) FROM Publisher WHERE PublisherID = @id", con);
+                SqlParameter pPubId = new SqlParameter("@id", pId);
+                checkPub.Parameters.Add(pPubId);
+                
+                if ((int)checkPub.ExecuteScalar() == 0)
                 {
-                    if (ex.Number == 2627 || ex.Number == 2601)
-                        MessageBox.Show("A book with this ISBN already exists in the system!", "Duplicate ISBN", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    else if (ex.Number == 547)
-                        MessageBox.Show("Database rule violated! Please ensure all text fields have actual words and not just spaces.", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    else
-                        MessageBox.Show("SQL Error: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Publisher ID '{pId}' does not exist in the system. Please verify the ID.", "Invalid Publisher ID", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
+
+                // --- EXECUTE INSERT ---
+                string query = "INSERT INTO Books (ISBN, Title, NumberOfPages, Category, AuthorName, StaffID, PublisherID) " +
+                            "VALUES (@isbn, @title, @pages, @cat, @author, @staff, @pub)";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                
+                SqlParameter pIsbn = new SqlParameter("@isbn", txtISBN.Text);
+                cmd.Parameters.Add(pIsbn);
+                
+                SqlParameter pTitle = new SqlParameter("@title", txtTitle.Text);
+                cmd.Parameters.Add(pTitle);
+                
+                SqlParameter pPages = new SqlParameter("@pages", pages);
+                cmd.Parameters.Add(pPages);
+                
+                SqlParameter pCat = new SqlParameter("@cat", txtCategory.Text);
+                cmd.Parameters.Add(pCat);
+                
+                SqlParameter pAuthor = new SqlParameter("@author", txtAuthor.Text);
+                cmd.Parameters.Add(pAuthor);
+                
+                SqlParameter pStaff = new SqlParameter("@staff", sId);
+                cmd.Parameters.Add(pStaff);
+                
+                SqlParameter pPub = new SqlParameter("@pub", pId);
+                cmd.Parameters.Add(pPub);
+
+                SqlCommand addCopy = new SqlCommand("INSERT INTO BookCopy (CopyNumber, ISBN, BookState) VALUES (1, @isbn, 'Available')", con);
+                SqlParameter pCopyIsbn = new SqlParameter("@isbn", txtISBN.Text);
+                addCopy.Parameters.Add(pCopyIsbn);
+
+                cmd.ExecuteNonQuery();
+                addCopy.ExecuteNonQuery();
+
+                MessageBox.Show("Book added to library successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
+                    MessageBox.Show("A book with this ISBN already exists in the system!", "Duplicate ISBN", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else if (ex.Number == 547)
+                    MessageBox.Show("Database rule violated! Please ensure all text fields have actual words and not just spaces.", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    MessageBox.Show("SQL Error: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally 
+            { 
+                con.Close(); 
             }
         }
     }
