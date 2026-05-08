@@ -50,7 +50,6 @@ namespace LibrarySystem
                 return;
             }
 
-            // STRICT COMPLIANCE: No 'using' block
             SqlConnection con = new SqlConnection(Program.ConnectionString);
             try
             {

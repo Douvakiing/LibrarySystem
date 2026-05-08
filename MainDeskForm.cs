@@ -278,7 +278,6 @@ namespace LibrarySystem
                 string stateResult = "";
                 DateTime dueDate = DateTime.MaxValue;
 
-                // Strictly using Reader without a using block
                 SqlDataReader reader = checkBook.ExecuteReader();
                 if (!reader.Read())
                 {

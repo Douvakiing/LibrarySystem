@@ -108,7 +108,6 @@ namespace LibrarySystem
                 SqlParameter pId = new SqlParameter("@id", txtId.Text);
                 cmd.Parameters.Add(pId);
 
-                // Strictly using Reader
                 SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
                 dt.Columns.Add("PublisherID");
