@@ -70,56 +70,50 @@ namespace LibrarySystem
             popup.ShowDialog(); 
             RefreshGrid();
         }
-
+        
         private void btnDeleteMember_Click(object sender, EventArgs e)
         {
-            // 1. Prompt for ISBN
             string memberID = Interaction.InputBox("Enter the Member ID of the member to delete:", "Member ID", "");
 
             if (!string.IsNullOrWhiteSpace(memberID))
             {
-                // 2. Confirm
                 var confirm = MessageBox.Show($"Delete Member {memberID}?", "Confirm", MessageBoxButtons.YesNo);
                 if (confirm == DialogResult.Yes)
                 {
-                    using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+                    SqlConnection con = new SqlConnection(Program.ConnectionString);
+                    try
                     {
+                        con.Open();
                         string query = "DELETE FROM Member WHERE MemberID = @memberID";
                         SqlCommand cmd = new SqlCommand(query, con);
-                        cmd.Parameters.AddWithValue("@memberID", memberID);
+                        
+                        SqlParameter pMemberId = new SqlParameter("@memberID", memberID);
+                        cmd.Parameters.Add(pMemberId);
 
-                        try
-                        {
-                            con.Open();
-                            int rows = cmd.ExecuteNonQuery();
-                            if (rows > 0) MessageBox.Show("Deleted.");
-                            else MessageBox.Show("memberID not found.");
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows > 0) MessageBox.Show("Deleted.");
+                        else MessageBox.Show("memberID not found.");
 
-                        }
-                        catch (SqlException ex)
+                    }
+                    catch (SqlException ex)
+                    {
+                        if (ex.Number == 547)
                         {
-                            if (ex.Number == 547)
-                            {
-                                MessageBox.Show("This member currently has a book borrowed! " +
-                                                "You must wait until the member returns the book and remove them from the Circulation Desk before deleting the member.",
-                                                "Action Denied", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                            }
-                            else
-                            {
-                                // Something else went wrong (server down, etc.)
-                                MessageBox.Show("A database error occurred: " + ex.Message, "Error");
-                            }
+                            MessageBox.Show("This member currently has a book borrowed!");
                         }
-                        finally
+                        else
                         {
-                            RefreshGrid();
-                            con.Close();
+                            MessageBox.Show("A database error occurred: " + ex.Message, "Error");
                         }
+                    }
+                    finally
+                    {
+                        RefreshGrid();
+                        con.Close();
                     }
                 }
             }
         }
-
         private void btnUpdateMember_Click(object sender, EventArgs e)
         {
             UpdateMemberForm popup = new UpdateMemberForm();

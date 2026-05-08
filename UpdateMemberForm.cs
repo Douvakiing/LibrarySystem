@@ -50,95 +50,88 @@ namespace LibrarySystem
 
         private void btnUpdateMember_Click(object sender, EventArgs e)
         {
-            // 1. Validate that the Search ID is provided and is a valid number
             if (!int.TryParse(txtMemberID.Text, out int memberId) || memberId <= 0)
             {
                 MessageBox.Show("Please enter a valid positive Member ID to update.", "Invalid ID", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
-                // 2. Build the dynamic SET clause based on your Member schema
                 List<string> columnsToUpdate = new List<string>();
                 SqlCommand cmd = new SqlCommand();
 
                 if (chkFirstName.Checked)
                 {
                     columnsToUpdate.Add("FirstName = @fn");
-                    cmd.Parameters.AddWithValue("@fn", txtFirstName.Text);
+                    SqlParameter pFn = new SqlParameter("@fn", txtFirstName.Text);
+                    cmd.Parameters.Add(pFn);
                 }
                 if (chkLastName.Checked)
                 {
                     columnsToUpdate.Add("LastName = @ln");
-                    cmd.Parameters.AddWithValue("@ln", txtLastName.Text);
+                    SqlParameter pLn = new SqlParameter("@ln", txtLastName.Text);
+                    cmd.Parameters.Add(pLn);
                 }
                 if (chkEmail.Checked)
                 {
                     columnsToUpdate.Add("Email = @email");
-                    cmd.Parameters.AddWithValue("@email", txtEmail.Text);
+                    SqlParameter pEmail = new SqlParameter("@email", txtEmail.Text);
+                    cmd.Parameters.Add(pEmail);
                 }
                 if (chkPhone.Checked)
                 {
                     columnsToUpdate.Add("Phone = @phone");
-                    cmd.Parameters.AddWithValue("@phone", txtPhone.Text);
+                    SqlParameter pPhone = new SqlParameter("@phone", txtPhone.Text);
+                    cmd.Parameters.Add(pPhone);
                 }
                 if (chkAddress.Checked)
                 {
                     columnsToUpdate.Add("Address = @addr");
-                    cmd.Parameters.AddWithValue("@addr", txtAddress.Text);
+                    SqlParameter pAddr = new SqlParameter("@addr", txtAddress.Text);
+                    cmd.Parameters.Add(pAddr);
                 }
                 if (chkMembershipDate.Checked)
                 {
                     columnsToUpdate.Add("MembershipDate = @date");
-                    cmd.Parameters.AddWithValue("@date", dtpMemberDate.Value);
+                    SqlParameter pDate = new SqlParameter("@date", dtpMemberDate.Value);
+                    cmd.Parameters.Add(pDate);
                 }
 
-                // 3. Exit if nothing was selected for update
                 if (columnsToUpdate.Count == 0)
                 {
                     MessageBox.Show("No fields selected for update.", "Nothing to do", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
-                // 4. Finalize the Query using MemberID as the filter
                 string query = "UPDATE Member SET " + string.Join(", ", columnsToUpdate) + " WHERE MemberID = @id";
                 cmd.CommandText = query;
                 cmd.Connection = con;
-                cmd.Parameters.AddWithValue("@id", memberId); // Using safely parsed ID
+                
+                SqlParameter pId = new SqlParameter("@id", memberId);
+                cmd.Parameters.Add(pId);
 
-                try
-                {
-                    con.Open();
-                    int result = cmd.ExecuteNonQuery();
+                con.Open();
+                int result = cmd.ExecuteNonQuery();
 
-                    if (result > 0)
-                    {
-                        MessageBox.Show("Member record updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Member ID not found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                catch (SqlException ex)
+                if (result > 0)
                 {
-                    // THE DIPLOMAT: Translating SQL Errors to English
-                    if (ex.Number == 547)
-                    {
-                        MessageBox.Show("Update failed due to database rules. Ensure names aren't empty.", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    else
-                    {
-                        MessageBox.Show("SQL Error: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show("Member record updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Application Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Member ID not found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-        }
-    }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 547) MessageBox.Show("Update failed due to database rules. Ensure names aren't empty.", "Constraint Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else MessageBox.Show("SQL Error: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex) { MessageBox.Show("Application Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            finally { con.Close(); }
+}    
+     }
 }

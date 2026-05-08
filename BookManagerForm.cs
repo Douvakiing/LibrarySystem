@@ -95,50 +95,48 @@ namespace LibrarySystem
 
             if (!string.IsNullOrWhiteSpace(isbn))
             {
-                var confirm = MessageBox.Show($"Are you sure you want to delete book {isbn} and ALL of its copies?",
-                                              "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var confirm = MessageBox.Show($"Are you sure you want to delete book {isbn} and ALL of its copies?", "Confirm Deletion", MessageBoxButtons.YesNo);
 
                 if (confirm == DialogResult.Yes)
                 {
-                    using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+                    SqlConnection con = new SqlConnection(Program.ConnectionString);
+                    try
                     {
                         con.Open();
-                        // Start a transaction so all steps happen together or not at all
                         SqlTransaction transaction = con.BeginTransaction();
 
                         try
                         {
-                            // STEP 1: Check if any copy is currently 'Checked Out'
                             string checkQuery = "SELECT COUNT(*) FROM BookCopy WHERE ISBN = @isbn AND BookState = 'Borrowed'";
                             SqlCommand checkCmd = new SqlCommand(checkQuery, con, transaction);
-                            checkCmd.Parameters.AddWithValue("@isbn", isbn);
+                            SqlParameter pCheckIsbn = new SqlParameter("@isbn", isbn);
+                            checkCmd.Parameters.Add(pCheckIsbn);
 
                             int borrowedCount = (int)checkCmd.ExecuteScalar();
 
                             if (borrowedCount > 0)
                             {
-                                MessageBox.Show($"Action Denied: {borrowedCount} copy/copies of this book are currently borrowed!",
-                                                "Book is Borrowed", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                                transaction.Rollback(); // Cancel everything
+                                MessageBox.Show($"Action Denied: {borrowedCount} copy/copies of this book are currently borrowed!");
+                                transaction.Rollback(); 
                                 return;
                             }
 
-                            // STEP 2: Delete all copies from BookCopy (since we know none are borrowed)
                             string delCopiesQuery = "DELETE FROM BookCopy WHERE ISBN = @isbn";
                             SqlCommand delCopiesCmd = new SqlCommand(delCopiesQuery, con, transaction);
-                            delCopiesCmd.Parameters.AddWithValue("@isbn", isbn);
+                            SqlParameter pDelCopyIsbn = new SqlParameter("@isbn", isbn);
+                            delCopiesCmd.Parameters.Add(pDelCopyIsbn);
                             delCopiesCmd.ExecuteNonQuery();
 
-                            // STEP 3: Delete the main book record
                             string delBookQuery = "DELETE FROM Books WHERE ISBN = @isbn";
                             SqlCommand delBookCmd = new SqlCommand(delBookQuery, con, transaction);
-                            delBookCmd.Parameters.AddWithValue("@isbn", isbn);
+                            SqlParameter pDelBookIsbn = new SqlParameter("@isbn", isbn);
+                            delBookCmd.Parameters.Add(pDelBookIsbn);
 
                             int rows = delBookCmd.ExecuteNonQuery();
 
                             if (rows > 0)
                             {
-                                transaction.Commit(); // Save changes permanently
+                                transaction.Commit(); 
                                 MessageBox.Show("Book and all available copies deleted successfully.", "Success");
                             }
                             else
@@ -149,13 +147,15 @@ namespace LibrarySystem
                         }
                         catch (Exception ex)
                         {
-                            transaction.Rollback(); // Something went wrong, undo everything
+                            transaction.Rollback(); 
                             MessageBox.Show("An error occurred during deletion: " + ex.Message);
                         }
-                        finally
-                        {
-                            RefreshGrid();
-                        }
+                    }
+                    catch (Exception ex) { MessageBox.Show("Connection error: " + ex.Message); }
+                    finally
+                    {
+                        RefreshGrid();
+                        con.Close();
                     }
                 }
             }
