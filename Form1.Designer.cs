@@ -124,7 +124,7 @@ namespace LibrarySystem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.AliceBlue; // Set background to white to match the logo background seamlessly
+            this.BackColor = System.Drawing.Color.AliceBlue; 
             this.ClientSize = new System.Drawing.Size(750, 600);
             this.MinimumSize = new System.Drawing.Size(760, 600); 
             

@@ -26,7 +26,6 @@
             // 
             // dgvMembers
             // 
-            // DYNAMIC FIX: Anchor to all 4 sides so it stretches!
             this.dgvMembers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -48,7 +47,6 @@
             // 
             // btnAddMember
             // 
-            // DYNAMIC FIX: Anchor Bottom so it moves down
             this.btnAddMember.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnAddMember.Location = new System.Drawing.Point(197, 381);
             this.btnAddMember.Name = "btnAddMember";

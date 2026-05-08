@@ -99,7 +99,6 @@ namespace LibrarySystem
 
         private void btnManageStaff_Click(object sender, EventArgs e)
         {
-            // Assuming you named your split form 'StaffManagementForm'
             StaffManagementForm staffForm = new StaffManagementForm();
             staffForm.Show();
             this.Hide();
@@ -107,7 +106,6 @@ namespace LibrarySystem
 
         private void btnManagePublishers_Click(object sender, EventArgs e)
         {
-            // Assuming you named your split form 'PublisherManagementForm'
             PublisherManagementForm pubForm = new PublisherManagementForm();
             pubForm.Show();
             this.Hide();
