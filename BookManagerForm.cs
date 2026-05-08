@@ -103,57 +103,56 @@ namespace LibrarySystem
                     try
                     {
                         con.Open();
-                        SqlTransaction transaction = con.BeginTransaction();
 
-                        try
+                        // 1. Check if any copies are currently borrowed
+                        string checkQuery = "SELECT COUNT(*) FROM BookCopy WHERE ISBN = @isbn AND BookState = 'Borrowed'";
+                        SqlCommand checkCmd = new SqlCommand(checkQuery, con);
+                        
+                        SqlParameter pCheckIsbn = new SqlParameter("@isbn", isbn);
+                        checkCmd.Parameters.Add(pCheckIsbn);
+
+                        int borrowedCount = (int)checkCmd.ExecuteScalar();
+
+                        if (borrowedCount > 0)
                         {
-                            string checkQuery = "SELECT COUNT(*) FROM BookCopy WHERE ISBN = @isbn AND BookState = 'Borrowed'";
-                            SqlCommand checkCmd = new SqlCommand(checkQuery, con, transaction);
-                            SqlParameter pCheckIsbn = new SqlParameter("@isbn", isbn);
-                            checkCmd.Parameters.Add(pCheckIsbn);
-
-                            int borrowedCount = (int)checkCmd.ExecuteScalar();
-
-                            if (borrowedCount > 0)
-                            {
-                                MessageBox.Show($"Action Denied: {borrowedCount} copy/copies of this book are currently borrowed!");
-                                transaction.Rollback(); 
-                                return;
-                            }
-
-                            string delCopiesQuery = "DELETE FROM BookCopy WHERE ISBN = @isbn";
-                            SqlCommand delCopiesCmd = new SqlCommand(delCopiesQuery, con, transaction);
-                            SqlParameter pDelCopyIsbn = new SqlParameter("@isbn", isbn);
-                            delCopiesCmd.Parameters.Add(pDelCopyIsbn);
-                            delCopiesCmd.ExecuteNonQuery();
-
-                            string delBookQuery = "DELETE FROM Books WHERE ISBN = @isbn";
-                            SqlCommand delBookCmd = new SqlCommand(delBookQuery, con, transaction);
-                            SqlParameter pDelBookIsbn = new SqlParameter("@isbn", isbn);
-                            delBookCmd.Parameters.Add(pDelBookIsbn);
-
-                            int rows = delBookCmd.ExecuteNonQuery();
-
-                            if (rows > 0)
-                            {
-                                transaction.Commit(); 
-                                MessageBox.Show("Book and all available copies deleted successfully.", "Success");
-                            }
-                            else
-                            {
-                                transaction.Rollback();
-                                MessageBox.Show("ISBN not found.", "Error");
-                            }
+                            MessageBox.Show($"Action Denied: {borrowedCount} copy/copies of this book are currently borrowed!");
+                            return; // Exit the method so it doesn't run the delete commands
                         }
-                        catch (Exception ex)
+
+                        // 2. Delete all physical copies of the book FIRST 
+                        string delCopiesQuery = "DELETE FROM BookCopy WHERE ISBN = @isbn";
+                        SqlCommand delCopiesCmd = new SqlCommand(delCopiesQuery, con);
+                        
+                        SqlParameter pDelCopyIsbn = new SqlParameter("@isbn", isbn);
+                        delCopiesCmd.Parameters.Add(pDelCopyIsbn);
+                        
+                        delCopiesCmd.ExecuteNonQuery();
+
+                        // 3. Delete the main book record from the Books table
+                        string delBookQuery = "DELETE FROM Books WHERE ISBN = @isbn";
+                        SqlCommand delBookCmd = new SqlCommand(delBookQuery, con);
+                        
+                        SqlParameter pDelBookIsbn = new SqlParameter("@isbn", isbn);
+                        delBookCmd.Parameters.Add(pDelBookIsbn);
+
+                        int rows = delBookCmd.ExecuteNonQuery();
+
+                        if (rows > 0)
                         {
-                            transaction.Rollback(); 
-                            MessageBox.Show("An error occurred during deletion: " + ex.Message);
+                            MessageBox.Show("Book and all available copies deleted successfully.", "Success");
+                        }
+                        else
+                        {
+                            MessageBox.Show("ISBN not found.", "Error");
                         }
                     }
-                    catch (Exception ex) { MessageBox.Show("Connection error: " + ex.Message); }
+                    catch (Exception ex) 
+                    { 
+                        MessageBox.Show("An error occurred during deletion: " + ex.Message); 
+                    }
                     finally
                     {
+                        // Always refresh the grid and close the connection
                         RefreshGrid();
                         con.Close();
                     }
