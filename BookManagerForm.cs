@@ -22,24 +22,41 @@ namespace LibrarySystem
 
         private void RefreshGrid()
         {
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
-                // Querying your real Books table
-                string query = "SELECT * FROM Books";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, con);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Books", con);
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dataTable = new DataTable();
+                
+                // Manually adding columns based on a standard Books table
+                dataTable.Columns.Add("ISBN");
+                dataTable.Columns.Add("Title");
+                dataTable.Columns.Add("NumberOfPages");
+                dataTable.Columns.Add("Category");
+                dataTable.Columns.Add("AuthorName");
+                dataTable.Columns.Add("StaffID");
+                dataTable.Columns.Add("PublisherID");
 
-                try
+                DataRow row;
+                while (reader.Read())
                 {
-                    adapter.Fill(dataTable);
-                    // Check your GridView name in Properties; it might be dataGridView1
-                    dgvBooks.DataSource = dataTable;
+                    row = dataTable.NewRow();
+                    row["ISBN"] = reader["ISBN"];
+                    row["Title"] = reader["Title"];
+                    row["NumberOfPages"] = reader["NumberOfPages"];
+                    row["Category"] = reader["Category"];
+                    row["AuthorName"] = reader["AuthorName"];
+                    row["StaffID"] = reader["StaffID"];
+                    row["PublisherID"] = reader["PublisherID"];
+                    dataTable.Rows.Add(row);
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Database Error: " + ex.Message);
-                }
+                reader.Close();
+                dgvBooks.DataSource = dataTable;
             }
+            catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void btnDashboard_Click(object sender, EventArgs e)

@@ -26,23 +26,37 @@ namespace LibrarySystem
 
         private void RefreshGrid()
         {
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
-                // Querying your real Books table
-                string query = "SELECT * FROM Member";
-                SqlDataAdapter adapter = new SqlDataAdapter(query, con);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Member", con);
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dataTable = new DataTable();
+                
+                // Assuming standard columns based on your DB schema
+                dataTable.Columns.Add("MemberID");
+                dataTable.Columns.Add("FirstName");
+                dataTable.Columns.Add("LastName");
+                dataTable.Columns.Add("Email");
+                dataTable.Columns.Add("Phone");
 
-                try
+                DataRow row;
+                while (reader.Read())
                 {
-                    adapter.Fill(dataTable);
-                    dgvMembers.DataSource = dataTable;
+                    row = dataTable.NewRow();
+                    row["MemberID"] = reader["MemberID"];
+                    row["FirstName"] = reader["FirstName"];
+                    row["LastName"] = reader["LastName"];
+                    row["Email"] = reader["Email"];
+                    row["Phone"] = reader["Phone"];
+                    dataTable.Rows.Add(row);
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Database Error: " + ex.Message);
-                }
+                reader.Close();
+                dgvMembers.DataSource = dataTable;
             }
+            catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void lblEmail_Click(object sender, EventArgs e)

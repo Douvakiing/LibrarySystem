@@ -23,20 +23,33 @@ namespace LibrarySystem
         // ==========================================
         private void LoadStaffData()
         {
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
-                // Updated to match your exact schema columns
-                string query = "SELECT StaffID, Name, Email FROM Staff";
-                SqlDataAdapter da = new SqlDataAdapter(query, con);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT StaffID, Name, Email FROM Staff", con);
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
-                try
+                
+                dt.Columns.Add("StaffID");
+                dt.Columns.Add("Name");
+                dt.Columns.Add("Email");
+
+                DataRow row;
+                while (reader.Read())
                 {
-                    da.Fill(dt);
-                    dgvStaff.DataSource = dt;
-                    dgvStaff.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    row = dt.NewRow();
+                    row["StaffID"] = reader["StaffID"];
+                    row["Name"] = reader["Name"];
+                    row["Email"] = reader["Email"];
+                    dt.Rows.Add(row);
                 }
-                catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+                reader.Close();
+                dgvStaff.DataSource = dt;
+                dgvStaff.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
+            catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void chkSearchMode_CheckedChanged(object sender, EventArgs e)
@@ -59,6 +72,7 @@ namespace LibrarySystem
             
         }
 
+        
         private void btnSearchStaff_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtStaffId.Text))
@@ -67,16 +81,36 @@ namespace LibrarySystem
                 return;
             }
 
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
+                con.Open();
                 string query = "SELECT StaffID, Name, Email FROM Staff WHERE StaffID = @id";
                 SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@id", txtStaffId.Text);
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                
+                SqlParameter pId = new SqlParameter("@id", txtStaffId.Text);
+                cmd.Parameters.Add(pId);
+                
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
-                da.Fill(dt);
+                dt.Columns.Add("StaffID");
+                dt.Columns.Add("Name");
+                dt.Columns.Add("Email");
+
+                DataRow row;
+                while (reader.Read())
+                {
+                    row = dt.NewRow();
+                    row["StaffID"] = reader["StaffID"];
+                    row["Name"] = reader["Name"];
+                    row["Email"] = reader["Email"];
+                    dt.Rows.Add(row);
+                }
+                reader.Close();
                 dgvStaff.DataSource = dt;
             }
+            catch (Exception ex) { MessageBox.Show("Database error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void btnAddStaff_Click(object sender, EventArgs e)
@@ -87,43 +121,40 @@ namespace LibrarySystem
                 return;
             }
 
-            // Ensure the ID is a valid number before sending to database
             if (!int.TryParse(txtStaffId.Text, out int staffId))
             {
                 MessageBox.Show("Staff ID must be a valid number.");
                 return;
             }
 
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
             try
             {
-                using (SqlConnection con = new SqlConnection(Program.ConnectionString))
-                {
-                    string query = "INSERT INTO Staff (StaffID, Name, Email) VALUES (@id, @name, @email)";
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    
-                    cmd.Parameters.AddWithValue("@id", staffId); // Now uses your manually typed ID
-                    cmd.Parameters.AddWithValue("@name", txtStaffFirst.Text);
-                    cmd.Parameters.AddWithValue("@email", txtStaffEmail.Text);
+                con.Open();
+                string query = "INSERT INTO Staff (StaffID, Name, Email) VALUES (@id, @name, @email)";
+                SqlCommand cmd = new SqlCommand(query, con);
+                
+                SqlParameter pId = new SqlParameter("@id", staffId);
+                cmd.Parameters.Add(pId);
+                
+                SqlParameter pName = new SqlParameter("@name", txtStaffFirst.Text);
+                cmd.Parameters.Add(pName);
+                
+                SqlParameter pEmail = new SqlParameter("@email", txtStaffEmail.Text);
+                cmd.Parameters.Add(pEmail);
 
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                cmd.ExecuteNonQuery();
+                
                 MessageBox.Show("Staff added successfully.");
                 LoadStaffData();
                 ClearStaffInputs();
             }
             catch (SqlException ex)
             {
-                // Error 2627 is a Primary Key violation (ID already exists)
-                if (ex.Number == 2627)
-                    MessageBox.Show("That Staff ID already exists! Please choose a different ID.");
-                else
-                    MessageBox.Show("Database error: " + ex.Message);
+                if (ex.Number == 2627) MessageBox.Show("That Staff ID already exists! Please choose a different ID.");
+                else MessageBox.Show("Database error: " + ex.Message);
             }
-        }
-        private void btnUpdateStaff_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Select a record in the grid to update (Implementation depends on your specific update flow).");
+            finally { con.Close(); }
         }
 
         private void btnDeleteStaff_Click(object sender, EventArgs e)
@@ -139,26 +170,25 @@ namespace LibrarySystem
             
             if (confirm == DialogResult.Yes)
             {
+                SqlConnection con = new SqlConnection(Program.ConnectionString);
                 try
                 {
-                    using (SqlConnection con = new SqlConnection(Program.ConnectionString))
-                    {
-                        string query = "DELETE FROM Staff WHERE StaffID = @id";
-                        SqlCommand cmd = new SqlCommand(query, con);
-                        cmd.Parameters.AddWithValue("@id", staffId);
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-                    }
+                    con.Open();
+                    string query = "DELETE FROM Staff WHERE StaffID = @id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    
+                    SqlParameter pId = new SqlParameter("@id", staffId);
+                    cmd.Parameters.Add(pId);
+                    
+                    cmd.ExecuteNonQuery();
                     LoadStaffData();
                 }
                 catch (SqlException ex)
                 {
-                    // Error 547 is a Foreign Key violation (trying to delete staff who manages books)
-                    if (ex.Number == 547) 
-                        MessageBox.Show("Cannot delete this staff member because they are assigned to existing Books.");
-                    else 
-                        MessageBox.Show("Database error: " + ex.Message);
+                    if (ex.Number == 547) MessageBox.Show("Cannot delete this staff member because they are assigned to existing Books.");
+                    else MessageBox.Show("Database error: " + ex.Message);
                 }
+                finally { con.Close(); }
             }
         }
 
@@ -168,27 +198,45 @@ namespace LibrarySystem
             txtStaffEmail.Clear(); txtStaffPhone.Clear(); txtStaffPassword.Clear();
         }
 
+         private void btnUpdateStaff_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Select a record in the grid to update (Implementation depends on your specific update flow).");
+        }
         // ==========================================
         // TAB 2: PUBLISHERS
         // ==========================================
         private void LoadPublisherData()
         {
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
-                // Join Publisher with PublisherAddress so we can see everything in one grid
+                con.Open();
                 string query = @"SELECT p.PublisherID, p.PublisherName, pa.Address 
-                                 FROM Publisher p 
-                                 LEFT JOIN PublisherAddress pa ON p.PublisherID = pa.PublisherID";
-                SqlDataAdapter da = new SqlDataAdapter(query, con);
+                                FROM Publisher p 
+                                LEFT JOIN PublisherAddress pa ON p.PublisherID = pa.PublisherID";
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
-                try
+                
+                dt.Columns.Add("PublisherID");
+                dt.Columns.Add("PublisherName");
+                dt.Columns.Add("Address");
+
+                DataRow row;
+                while (reader.Read())
                 {
-                    da.Fill(dt);
-                    dgvPublishers.DataSource = dt;
-                    dgvPublishers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    row = dt.NewRow();
+                    row["PublisherID"] = reader["PublisherID"];
+                    row["PublisherName"] = reader["PublisherName"];
+                    row["Address"] = reader["Address"];
+                    dt.Rows.Add(row);
                 }
-                catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+                reader.Close();
+                dgvPublishers.DataSource = dt;
+                dgvPublishers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
+            catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void chkSearchPub_CheckedChanged(object sender, EventArgs e)
@@ -216,19 +264,39 @@ namespace LibrarySystem
                 return;
             }
 
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
+                con.Open();
                 string query = @"SELECT p.PublisherID, p.PublisherName, pa.Address 
-                                 FROM Publisher p 
-                                 LEFT JOIN PublisherAddress pa ON p.PublisherID = pa.PublisherID 
-                                 WHERE p.PublisherID = @id";
+                                FROM Publisher p 
+                                LEFT JOIN PublisherAddress pa ON p.PublisherID = pa.PublisherID 
+                                WHERE p.PublisherID = @id";
                 SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@id", txtPubId.Text);
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                
+                SqlParameter pId = new SqlParameter("@id", txtPubId.Text);
+                cmd.Parameters.Add(pId);
+                
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
-                da.Fill(dt);
+                dt.Columns.Add("PublisherID");
+                dt.Columns.Add("PublisherName");
+                dt.Columns.Add("Address");
+
+                DataRow row;
+                while (reader.Read())
+                {
+                    row = dt.NewRow();
+                    row["PublisherID"] = reader["PublisherID"];
+                    row["PublisherName"] = reader["PublisherName"];
+                    row["Address"] = reader["Address"];
+                    dt.Rows.Add(row);
+                }
+                reader.Close();
                 dgvPublishers.DataSource = dt;
             }
+            catch (Exception ex) { MessageBox.Show("Database error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void btnAddPub_Click(object sender, EventArgs e)
@@ -245,44 +313,46 @@ namespace LibrarySystem
                 return;
             }
 
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
             try
             {
-                using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+                con.Open();
+
+                string pubQuery = "INSERT INTO Publisher (PublisherID, PublisherName) VALUES (@id, @name)";
+                SqlCommand cmd = new SqlCommand(pubQuery, con);
+                
+                SqlParameter pId = new SqlParameter("@id", pubId);
+                cmd.Parameters.Add(pId);
+                
+                SqlParameter pName = new SqlParameter("@name", txtPubName.Text);
+                cmd.Parameters.Add(pName);
+                
+                cmd.ExecuteNonQuery();
+
+                if (!string.IsNullOrWhiteSpace(txtPubAddress.Text))
                 {
-                    con.Open();
-
-                    // Insert using your manual ID
-                    string pubQuery = "INSERT INTO Publisher (PublisherID, PublisherName) VALUES (@id, @name)";
-                    SqlCommand cmd = new SqlCommand(pubQuery, con);
-                    cmd.Parameters.AddWithValue("@id", pubId);
-                    cmd.Parameters.AddWithValue("@name", txtPubName.Text);
-                    cmd.ExecuteNonQuery();
-
-                    if (!string.IsNullOrWhiteSpace(txtPubAddress.Text))
-                    {
-                        string addrQuery = "INSERT INTO PublisherAddress (Address, PublisherID) VALUES (@address, @id)";
-                        SqlCommand addrCmd = new SqlCommand(addrQuery, con);
-                        addrCmd.Parameters.AddWithValue("@address", txtPubAddress.Text);
-                        addrCmd.Parameters.AddWithValue("@id", pubId);
-                        addrCmd.ExecuteNonQuery();
-                    }
+                    string addrQuery = "INSERT INTO PublisherAddress (Address, PublisherID) VALUES (@address, @id)";
+                    SqlCommand addrCmd = new SqlCommand(addrQuery, con);
+                    
+                    SqlParameter pAddr = new SqlParameter("@address", txtPubAddress.Text);
+                    addrCmd.Parameters.Add(pAddr);
+                    
+                    SqlParameter pAddrId = new SqlParameter("@id", pubId);
+                    addrCmd.Parameters.Add(pAddrId);
+                    
+                    addrCmd.ExecuteNonQuery();
                 }
+                
                 MessageBox.Show("Publisher added successfully.");
                 LoadPublisherData();
                 ClearPublisherInputs();
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 2627)
-                    MessageBox.Show("That Publisher ID already exists! Please choose a different ID.");
-                else
-                    MessageBox.Show("Database error: " + ex.Message);
+                if (ex.Number == 2627) MessageBox.Show("That Publisher ID already exists! Please choose a different ID.");
+                else MessageBox.Show("Database error: " + ex.Message);
             }
-        }
-
-        private void btnUpdatePub_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Select a record in the grid to update.");
+            finally { con.Close(); }
         }
 
         private void btnDeletePub_Click(object sender, EventArgs e)
@@ -298,36 +368,43 @@ namespace LibrarySystem
             
             if (confirm == DialogResult.Yes)
             {
+                SqlConnection con = new SqlConnection(Program.ConnectionString);
                 try
                 {
-                    using (SqlConnection con = new SqlConnection(Program.ConnectionString))
-                    {
-                        con.Open();
+                    con.Open();
 
-                        // IMPORTANT: Because PublisherAddress relies on PublisherID, we MUST delete the address FIRST
-                        string deleteAddrQuery = "DELETE FROM PublisherAddress WHERE PublisherID = @id";
-                        SqlCommand cmdAddr = new SqlCommand(deleteAddrQuery, con);
-                        cmdAddr.Parameters.AddWithValue("@id", pubId);
-                        cmdAddr.ExecuteNonQuery();
+                    // Delete address FIRST due to constraints
+                    string deleteAddrQuery = "DELETE FROM PublisherAddress WHERE PublisherID = @id";
+                    SqlCommand cmdAddr = new SqlCommand(deleteAddrQuery, con);
+                    
+                    SqlParameter pAddrId = new SqlParameter("@id", pubId);
+                    cmdAddr.Parameters.Add(pAddrId);
+                    
+                    cmdAddr.ExecuteNonQuery();
 
-                        // Now it is safe to delete the Publisher
-                        string deletePubQuery = "DELETE FROM Publisher WHERE PublisherID = @id";
-                        SqlCommand cmdPub = new SqlCommand(deletePubQuery, con);
-                        cmdPub.Parameters.AddWithValue("@id", pubId);
-                        cmdPub.ExecuteNonQuery();
-                    }
+                    // Delete Publisher
+                    string deletePubQuery = "DELETE FROM Publisher WHERE PublisherID = @id";
+                    SqlCommand cmdPub = new SqlCommand(deletePubQuery, con);
+                    
+                    SqlParameter pPubId = new SqlParameter("@id", pubId);
+                    cmdPub.Parameters.Add(pPubId);
+                    
+                    cmdPub.ExecuteNonQuery();
+                    
                     LoadPublisherData();
                 }
                 catch (SqlException ex)
                 {
-                    if (ex.Number == 547) 
-                        MessageBox.Show("Cannot delete this publisher because they have existing Books attached to them.");
-                    else 
-                        MessageBox.Show("Database error: " + ex.Message);
+                    if (ex.Number == 547) MessageBox.Show("Cannot delete this publisher because they have existing Books attached to them.");
+                    else MessageBox.Show("Database error: " + ex.Message);
                 }
+                finally { con.Close(); }
             }
+}
+        private void btnUpdatePub_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Select a record in the grid to update.");
         }
-
         private void ClearPublisherInputs()
         {
             txtPubId.Clear(); txtPubName.Clear(); txtPubEmail.Clear();

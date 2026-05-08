@@ -23,9 +23,10 @@ namespace LibrarySystem
 
         private void LoadStockData()
         {
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
-                // LEFT JOIN ensures that even books with 0 copies show up in the list!
+                con.Open();
                 string query = @"
                     SELECT 
                         b.ISBN, 
@@ -37,16 +38,33 @@ namespace LibrarySystem
                     LEFT JOIN BookCopy bc ON b.ISBN = bc.ISBN
                     ORDER BY b.ISBN";
                 
-                SqlDataAdapter da = new SqlDataAdapter(query, con);
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
-                try
+                
+                dt.Columns.Add("ISBN");
+                dt.Columns.Add("Title");
+                dt.Columns.Add("AuthorName");
+                dt.Columns.Add("CopyNumber");
+                dt.Columns.Add("BookState");
+
+                DataRow row;
+                while (reader.Read())
                 {
-                    da.Fill(dt);
-                    dgvStock.DataSource = dt;
-                    dgvStock.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    row = dt.NewRow();
+                    row["ISBN"] = reader["ISBN"];
+                    row["Title"] = reader["Title"];
+                    row["AuthorName"] = reader["AuthorName"];
+                    row["CopyNumber"] = reader["CopyNumber"];
+                    row["BookState"] = reader["BookState"];
+                    dt.Rows.Add(row);
                 }
-                catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+                reader.Close();
+                dgvStock.DataSource = dt;
+                dgvStock.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
+            catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void dgvStock_CellClick(object sender, DataGridViewCellEventArgs e)

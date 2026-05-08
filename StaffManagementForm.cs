@@ -20,19 +20,37 @@ namespace LibrarySystem
 
         private void LoadStaffData()
         {
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
-                string query = "SELECT StaffID, Name, Phone, Password, Email FROM Staff";
-                SqlDataAdapter da = new SqlDataAdapter(query, con);
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT StaffID, Name, Phone, Password, Email FROM Staff", con);
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
-                try
+                
+                dt.Columns.Add("StaffID");
+                dt.Columns.Add("Name");
+                dt.Columns.Add("Phone");
+                dt.Columns.Add("Password");
+                dt.Columns.Add("Email");
+
+                DataRow row;
+                while (reader.Read())
                 {
-                    da.Fill(dt);
-                    dgvStaff.DataSource = dt;
-                    dgvStaff.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    row = dt.NewRow();
+                    row["StaffID"] = reader["StaffID"];
+                    row["Name"] = reader["Name"];
+                    row["Phone"] = reader["Phone"];
+                    row["Password"] = reader["Password"];
+                    row["Email"] = reader["Email"];
+                    dt.Rows.Add(row);
                 }
-                catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+                reader.Close();
+                dgvStaff.DataSource = dt;
+                dgvStaff.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             }
+            catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void chkSearchMode_CheckedChanged(object sender, EventArgs e)
@@ -53,7 +71,12 @@ namespace LibrarySystem
             ClearInputs();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            ClearInputs();
+        }
+
+       private void btnSearch_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtId.Text))
             {
@@ -61,41 +84,54 @@ namespace LibrarySystem
                 return;
             }
 
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
             try
             {
-                using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+                con.Open(); 
+                
+                SqlCommand checkID = new SqlCommand("SELECT StaffID FROM Staff WHERE StaffID=@id", con);
+                SqlParameter pCheckId = new SqlParameter("@id", txtId.Text);
+                checkID.Parameters.Add(pCheckId);
+                
+                if (checkID.ExecuteScalar() == null)
                 {
-                    con.Open(); 
-                    
-                    SqlCommand checkID = new SqlCommand("SELECT StaffID FROM Staff WHERE StaffID=@id", con);
-                    checkID.Parameters.AddWithValue("@id", txtId.Text);
-                    
-                    if (checkID.ExecuteScalar() == null)
-                    {
-                        MessageBox.Show("No staff exists with this ID");
-                        return; // Stop searching if it doesn't exist
-                    }
-
-                    string query = "SELECT StaffID, Name, Phone, Password, Email FROM Staff WHERE StaffID = @id";
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@id", txtId.Text);
-                    
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dgvStaff.DataSource = dt;
+                    MessageBox.Show("No staff exists with this ID");
+                    return; 
                 }
+
+                string query = "SELECT StaffID, Name, Phone, Password, Email FROM Staff WHERE StaffID = @id";
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlParameter pSearchId = new SqlParameter("@id", txtId.Text);
+                cmd.Parameters.Add(pSearchId);
+                
+                SqlDataReader reader = cmd.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Columns.Add("StaffID");
+                dt.Columns.Add("Name");
+                dt.Columns.Add("Phone");
+                dt.Columns.Add("Password");
+                dt.Columns.Add("Email");
+
+                DataRow row;
+                while (reader.Read())
+                {
+                    row = dt.NewRow();
+                    row["StaffID"] = reader["StaffID"];
+                    row["Name"] = reader["Name"];
+                    row["Phone"] = reader["Phone"];
+                    row["Password"] = reader["Password"];
+                    row["Email"] = reader["Email"];
+                    dt.Rows.Add(row);
+                }
+                reader.Close();
+                dgvStaff.DataSource = dt;
             }
             catch(SqlException ex) { MessageBox.Show("Error: " + ex.Message); }
-        }
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            ClearInputs();
+            finally { con.Close(); }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            // ENFORCING SCHEMA: ID, Name, Password, and Email cannot be empty
             if (string.IsNullOrWhiteSpace(txtId.Text) || string.IsNullOrWhiteSpace(txtName.Text) || 
                 string.IsNullOrWhiteSpace(txtPassword.Text) || string.IsNullOrWhiteSpace(txtEmail.Text))
             {
@@ -109,24 +145,29 @@ namespace LibrarySystem
                 return;
             }
 
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
             try
             {
-                using (SqlConnection con = new SqlConnection(Program.ConnectionString))
-                {
-                    string query = "INSERT INTO Staff (StaffID, Name, Phone, Password, Email) VALUES (@id, @name, @phone, @password, @email)";
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    
-                    cmd.Parameters.AddWithValue("@id", staffId);
-                    cmd.Parameters.AddWithValue("@name", txtName.Text);
-                    cmd.Parameters.AddWithValue("@password", txtPassword.Text);
-                    cmd.Parameters.AddWithValue("@email", txtEmail.Text);
-                    
-                    // Handle NULL Phone properly
-                    cmd.Parameters.AddWithValue("@phone", string.IsNullOrWhiteSpace(txtPhone.Text) ? (object)DBNull.Value : txtPhone.Text);
+                con.Open();
+                string query = "INSERT INTO Staff (StaffID, Name, Phone, Password, Email) VALUES (@id, @name, @phone, @password, @email)";
+                SqlCommand cmd = new SqlCommand(query, con);
+                
+                SqlParameter pId = new SqlParameter("@id", staffId);
+                cmd.Parameters.Add(pId);
+                
+                SqlParameter pName = new SqlParameter("@name", txtName.Text);
+                cmd.Parameters.Add(pName);
+                
+                SqlParameter pPhone = new SqlParameter("@phone", string.IsNullOrWhiteSpace(txtPhone.Text) ? (object)DBNull.Value : txtPhone.Text);
+                cmd.Parameters.Add(pPhone);
+                
+                SqlParameter pPass = new SqlParameter("@password", txtPassword.Text);
+                cmd.Parameters.Add(pPass);
+                
+                SqlParameter pEmail = new SqlParameter("@email", txtEmail.Text);
+                cmd.Parameters.Add(pEmail);
 
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                cmd.ExecuteNonQuery();
                 MessageBox.Show("Staff added successfully.");
                 LoadStaffData();
                 ClearInputs();
@@ -136,11 +177,11 @@ namespace LibrarySystem
                 if (ex.Number == 2627) MessageBox.Show("That Staff ID already exists!");
                 else MessageBox.Show("Database error: " + ex.Message);
             }
+            finally { con.Close(); }
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            // ENFORCING SCHEMA: ID, Name, Password, and Email cannot be empty
             if (string.IsNullOrWhiteSpace(txtId.Text) || string.IsNullOrWhiteSpace(txtName.Text) || 
                 string.IsNullOrWhiteSpace(txtPassword.Text) || string.IsNullOrWhiteSpace(txtEmail.Text))
             {
@@ -148,44 +189,35 @@ namespace LibrarySystem
                 return;
             }
 
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
             try
             {
-                using (SqlConnection con = new SqlConnection(Program.ConnectionString))
-                {
-                    string query = @"UPDATE Staff 
-                                     SET Name = @name, Phone = @phone, Password = @password, Email = @email 
-                                     WHERE StaffID = @id";
-                    
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    
-                    cmd.Parameters.AddWithValue("@id", txtId.Text);
-                    cmd.Parameters.AddWithValue("@name", txtName.Text);
-                    cmd.Parameters.AddWithValue("@password", txtPassword.Text);
-                    cmd.Parameters.AddWithValue("@email", txtEmail.Text);
-                    
-                    // Handle NULL Phone properly
-                    cmd.Parameters.AddWithValue("@phone", string.IsNullOrWhiteSpace(txtPhone.Text) ? (object)DBNull.Value : txtPhone.Text);
+                con.Open();
+                string query = @"UPDATE Staff SET Name = @name, Phone = @phone, Password = @password, Email = @email WHERE StaffID = @id";
+                
+                SqlCommand cmd = new SqlCommand(query, con);
+                
+                SqlParameter pId = new SqlParameter("@id", txtId.Text);
+                cmd.Parameters.Add(pId);
+                SqlParameter pName = new SqlParameter("@name", txtName.Text);
+                cmd.Parameters.Add(pName);
+                SqlParameter pPhone = new SqlParameter("@phone", string.IsNullOrWhiteSpace(txtPhone.Text) ? (object)DBNull.Value : txtPhone.Text);
+                cmd.Parameters.Add(pPhone);
+                SqlParameter pPass = new SqlParameter("@password", txtPassword.Text);
+                cmd.Parameters.Add(pPass);
+                SqlParameter pEmail = new SqlParameter("@email", txtEmail.Text);
+                cmd.Parameters.Add(pEmail);
 
-                    con.Open();
-                    int rowsAffected = cmd.ExecuteNonQuery();
+                int rowsAffected = cmd.ExecuteNonQuery();
 
-                    if (rowsAffected > 0)
-                    {
-                        MessageBox.Show("Staff updated successfully.");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Staff ID not found. Could not update.");
-                    }
+                if (rowsAffected > 0) MessageBox.Show("Staff updated successfully.");
+                else MessageBox.Show("Staff ID not found. Could not update.");
 
-                    LoadStaffData(); 
-                    ClearInputs();   
-                }
+                LoadStaffData(); 
+                ClearInputs();   
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Database error: " + ex.Message);
-            }
+            catch (Exception ex) { MessageBox.Show("Database error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -201,16 +233,16 @@ namespace LibrarySystem
             
             if (confirm == DialogResult.Yes)
             {
+                SqlConnection con = new SqlConnection(Program.ConnectionString);
                 try
                 {
-                    using (SqlConnection con = new SqlConnection(Program.ConnectionString))
-                    {
-                        string query = "DELETE FROM Staff WHERE StaffID = @id";
-                        SqlCommand cmd = new SqlCommand(query, con);
-                        cmd.Parameters.AddWithValue("@id", staffId);
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-                    }
+                    con.Open();
+                    string query = "DELETE FROM Staff WHERE StaffID = @id";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    SqlParameter pId = new SqlParameter("@id", staffId);
+                    cmd.Parameters.Add(pId);
+                    
+                    cmd.ExecuteNonQuery();
                     LoadStaffData();
                 }
                 catch (SqlException ex)
@@ -218,9 +250,10 @@ namespace LibrarySystem
                     if (ex.Number == 547) MessageBox.Show("Cannot delete this staff member because they manage existing Books.");
                     else MessageBox.Show("Database error: " + ex.Message);
                 }
+                finally { con.Close(); }
             }
         }
-
+       
         private void dgvStaff_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)

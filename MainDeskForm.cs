@@ -25,8 +25,10 @@ namespace LibrarySystem
         // ==========================================
         private void LoadAvailableBooks()
         {
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
+                con.Open();
                 string query = @"
                     SELECT 
                         bc.ISBN, 
@@ -38,21 +40,38 @@ namespace LibrarySystem
                     WHERE bc.BookState = 'Available'
                     ORDER BY bc.ISBN";
 
-                SqlDataAdapter da = new SqlDataAdapter(query, con);
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
-                try
+                
+                dt.Columns.Add("ISBN");
+                dt.Columns.Add("CopyNumber");
+                dt.Columns.Add("Title");
+                dt.Columns.Add("AuthorName");
+
+                DataRow row;
+                while (reader.Read())
                 {
-                    da.Fill(dt);
-                    dgvBookCopies.DataSource = dt;
+                    row = dt.NewRow();
+                    row["ISBN"] = reader["ISBN"];
+                    row["CopyNumber"] = reader["CopyNumber"];
+                    row["Title"] = reader["Title"];
+                    row["AuthorName"] = reader["AuthorName"];
+                    dt.Rows.Add(row);
                 }
-                catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+                reader.Close();
+                dgvBookCopies.DataSource = dt;
             }
+            catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         private void LoadActiveLoans()
         {
-            using (SqlConnection con = new SqlConnection(Program.ConnectionString))
+            SqlConnection con = new SqlConnection(Program.ConnectionString);
+            try
             {
+                con.Open();
                 string query = @"
                     SELECT 
                         bc.CopyNumber, 
@@ -68,15 +87,36 @@ namespace LibrarySystem
                     WHERE bc.BookState = 'Borrowed'
                     ORDER BY bc.DueDate ASC";
 
-                SqlDataAdapter da = new SqlDataAdapter(query, con);
+                SqlCommand cmd = new SqlCommand(query, con);
+                SqlDataReader reader = cmd.ExecuteReader();
                 DataTable dt = new DataTable();
-                try
+                
+                dt.Columns.Add("CopyNumber");
+                dt.Columns.Add("ISBN");
+                dt.Columns.Add("Title");
+                dt.Columns.Add("LoanDate");
+                dt.Columns.Add("DueDate");
+                dt.Columns.Add("MemberID");
+                dt.Columns.Add("MemberName");
+
+                DataRow row;
+                while (reader.Read())
                 {
-                    da.Fill(dt);
-                    dgvActiveLoans.DataSource = dt;
+                    row = dt.NewRow();
+                    row["CopyNumber"] = reader["CopyNumber"];
+                    row["ISBN"] = reader["ISBN"];
+                    row["Title"] = reader["Title"];
+                    row["LoanDate"] = reader["LoanDate"];
+                    row["DueDate"] = reader["DueDate"];
+                    row["MemberID"] = reader["MemberID"];
+                    row["MemberName"] = reader["MemberName"];
+                    dt.Rows.Add(row);
                 }
-                catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+                reader.Close();
+                dgvActiveLoans.DataSource = dt;
             }
+            catch (Exception ex) { MessageBox.Show("Database Error: " + ex.Message); }
+            finally { con.Close(); }
         }
 
         // ==========================================
